@@ -331,7 +331,7 @@
                             android:layout_width="130dp"
                             android:layout_height="wrap_content"
                             android:layout_below="@id/currentShipShieldHealthLabelTextView"
-                            android:text="@string/ship_oxygen_remaining"
+                            android:text="@string/oxygen_remaining"
                             android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                             android:textStyle="bold" />
 

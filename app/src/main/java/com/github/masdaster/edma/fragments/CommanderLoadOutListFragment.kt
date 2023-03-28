@@ -11,7 +11,7 @@ class CommanderLoadOutListFragment : AbstractListFragment<CommanderLoadOutListAd
 
     private val viewModel: CommanderViewModel by activityViewModels()
 
-    override fun getNewRecyclerViewAdapter(): CommanderLoadOutListAdapter = CommanderLoadOutListAdapter(context)
+    override fun getNewRecyclerViewAdapter(): CommanderLoadOutListAdapter = CommanderLoadOutListAdapter()
 
     override fun getData() {
         viewModel.getLoadOutList().observe(viewLifecycleOwner, { result ->

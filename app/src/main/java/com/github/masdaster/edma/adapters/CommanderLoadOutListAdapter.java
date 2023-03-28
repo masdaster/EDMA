@@ -1,29 +1,23 @@
 package com.github.masdaster.edma.adapters;
 
 import android.content.Context;
-import android.graphics.Matrix;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.github.masdaster.edma.R;
 import com.github.masdaster.edma.databinding.ListItemLoadOutListLoadOutBinding;
 import com.github.masdaster.edma.models.CommanderLoadOutInformation;
 import com.github.masdaster.edma.models.Suit;
-
-import java.text.NumberFormat;
+import com.github.masdaster.edma.utils.MiscUtils;
 
 public class CommanderLoadOutListAdapter extends ListAdapter<CommanderLoadOutInformation, CommanderLoadOutListAdapter.LoadOutViewHolder> {
 
-    private final Context context;
-
-    public CommanderLoadOutListAdapter(Context ctx) {
+    public CommanderLoadOutListAdapter() {
         // Parent class setup
         super(new DiffUtil.ItemCallback<CommanderLoadOutInformation>() {
             @Override
@@ -38,8 +32,6 @@ public class CommanderLoadOutListAdapter extends ListAdapter<CommanderLoadOutInf
                 return oldItem.getLoadOutSlotId() == newItem.getLoadOutSlotId();
             }
         });
-
-        this.context = ctx;
     }
 
     @NonNull
@@ -70,27 +62,7 @@ public class CommanderLoadOutListAdapter extends ListAdapter<CommanderLoadOutInf
         holder.viewBinding.gradeRatingBar.setProgress(suit.getGrade());
 
         // Suit picture
-        holder.viewBinding.suitImageView.setImageResource(getSuitPicture(suit.getType()));
-        final Matrix matrix = holder.viewBinding.suitImageView.getImageMatrix();
-        final float imageWidth = holder.viewBinding.suitImageView.getDrawable().getIntrinsicWidth();
-        final int screenWidth = context.getResources().getDisplayMetrics().widthPixels;
-        final float scaleRatio = screenWidth / imageWidth;
-        matrix.postScale(scaleRatio, scaleRatio);
-        holder.viewBinding.suitImageView.setImageMatrix(matrix);
-    }
-
-    @DrawableRes
-    private int getSuitPicture(String suitType){
-        switch(suitType){
-            default:
-                return R.drawable.remlok_flight_suit;
-            case "UtilitySuit":
-                return R.drawable.maverick_utility_suit;
-            case "TacticalSuit":
-                return R.drawable.dominator_tactical_suit;
-            case "ExplorationSuit":
-                return R.drawable.artemis_explorer_suit;
-        }
+        MiscUtils.loadLoadOutImage(holder.viewBinding.suitImageView, suit);
     }
 
     public static class LoadOutViewHolder extends RecyclerView.ViewHolder {

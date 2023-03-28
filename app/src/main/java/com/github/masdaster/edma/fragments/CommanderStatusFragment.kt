@@ -60,46 +60,16 @@ class CommanderStatusFragment : Fragment() {
         // Set temporary text
         binding.creditsTextView.text = resources.getString(R.string.credits, "?")
         binding.locationTextView.text = resources.getString(R.string.unknown)
-        RankUtils.setTempContent(
-            context, binding.federationRankLayout.root,
-            getString(R.string.rank_federation)
-        )
-        RankUtils.setTempContent(
-            context,
-            binding.empireRankLayout.root,
-            getString(R.string.rank_empire)
-        )
-        RankUtils.setTempContent(
-            context,
-            binding.combatRankLayout.root,
-            getString(R.string.rank_combat)
-        )
-        RankUtils.setTempContent(
-            context,
-            binding.tradeRankLayout.root,
-            getString(R.string.rank_trading)
-        )
-        RankUtils.setTempContent(
-            context, binding.explorationRankLayout.root,
-            getString(R.string.rank_exploration)
-        )
-        RankUtils.setTempContent(
-            context,
-            binding.arenaRankLayout.root,
-            getString(R.string.rank_arena)
-        )
-        RankUtils.setTempContent(
-            context,
-            binding.mercenaryRankLayout.root,
-            getString(R.string.rank_mercenary)
-        )
-        RankUtils.setTempContent(
-            context,
-            binding.exobiologistRankLayout.root,
-            getString(R.string.rank_exobiologist)
-        )
+        RankUtils.setTempContent(context, binding.federationRankLayout.root, getString(R.string.rank_federation))
+        RankUtils.setTempContent(context, binding.empireRankLayout.root, getString(R.string.rank_empire))
+        RankUtils.setTempContent(context, binding.combatRankLayout.root, getString(R.string.rank_combat))
+        RankUtils.setTempContent(context, binding.tradeRankLayout.root, getString(R.string.rank_trading))
+        RankUtils.setTempContent(context, binding.explorationRankLayout.root, getString(R.string.rank_exploration))
+        RankUtils.setTempContent(context, binding.arenaRankLayout.root, getString(R.string.rank_arena))
+        RankUtils.setTempContent(context, binding.mercenaryRankLayout.root, getString(R.string.rank_mercenary))
+        RankUtils.setTempContent(context, binding.exobiologistRankLayout.root, getString(R.string.rank_exobiologist))
 
-        // Hide views according to supported informations from source
+        // Hide views according to supported information from source
         val currentContext = context
         if (currentContext != null) {
             if (!CommanderUtils.hasCreditsData(currentContext)) {
@@ -114,21 +84,10 @@ class CommanderStatusFragment : Fragment() {
         }
 
         // Setup observers
-        viewModel.getRanks().observe(viewLifecycleOwner) {
-            onRanksChange(it)
-        }
-        viewModel.getCredits().observe(viewLifecycleOwner) {
-            onCreditsChange(it)
-        }
-        viewModel.getPosition().observe(viewLifecycleOwner) {
-            onPositionChange(it)
-        }
-        viewModel.getCurrentShip().observe(viewLifecycleOwner) {
-            onCurrentShipChange(it)
-        }
-        viewModel.getFleet().observe(viewLifecycleOwner) {
-            onFleetChange(it)
-        }
+        viewModel.getRanks().observe(viewLifecycleOwner, ::onRanksChange)
+        viewModel.getCredits().observe(viewLifecycleOwner, ::onCreditsChange)
+        viewModel.getPosition().observe(viewLifecycleOwner, ::onPositionChange)
+        viewModel.getCurrentShip().observe(viewLifecycleOwner, ::onCurrentShipChange)
 
         // Display message if no source, else fetch informations
         if (currentContext != null) {
@@ -145,9 +104,7 @@ class CommanderStatusFragment : Fragment() {
                         val i = Intent(context, SettingsActivity::class.java)
                         startActivity(i)
                     }
-                    .setNegativeButton(
-                        android.R.string.cancel
-                    ) { d: DialogInterface, _: Int -> d.dismiss() }
+                    .setNegativeButton(android.R.string.cancel) { d: DialogInterface, _: Int -> d.dismiss() }
                     .create()
                 dialog.show()
             }
@@ -184,9 +141,7 @@ class CommanderStatusFragment : Fragment() {
                     val i = Intent(context, LoginActivity::class.java)
                     startActivity(i)
                 }
-                .setNegativeButton(
-                    android.R.string.cancel
-                ) { d: DialogInterface, _: Int -> d.dismiss() }
+                .setNegativeButton(android.R.string.cancel) { d: DialogInterface, _: Int -> d.dismiss() }
                 .setOnDismissListener {
                     it.dismiss()
                     frontierLoginNeeded = false
@@ -232,10 +187,6 @@ class CommanderStatusFragment : Fragment() {
         } else {
             onSuccess(result)
         }
-    }
-
-    private fun onFleetChange(result: ProxyResult<CommanderFleet>) {
-        handleResult(result) {}
     }
 
     private fun onPositionChange(result: ProxyResult<CommanderPosition>) {
