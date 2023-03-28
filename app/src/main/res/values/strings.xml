@@ -68,6 +68,13 @@
     <string name="current_ship">Current ship</string>
     <string name="ship_value">Ship value</string>
     <string name="cargo_value">Cargo value</string>
+    <string name="ship_hull_health">Hull health</string>
+    <string name="ship_integrity_health">Integrity health</string>
+    <string name="ship_paintwork_health">Paintwork health</string>
+    <string name="ship_shield_health">Shield health</string>
+    <string name="ship_cockpit_breached">Cockpit breached</string>
+    <string name="ship_oxygen_remaining">Oxygen remaining</string>
+    <string name="ship_shield_up">Shield up</string>
 
     <!--Ranks-->
     <string name="rank_federation">Federation</string>

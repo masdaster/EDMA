@@ -52,6 +52,8 @@ object CommanderUtils {
         return false
     }
 
+    fun hasCurrentShipData(context: Context): Boolean = FrontierPlayer(context).isUsable()
+
     fun hasCommanderInformations(context: Context): Boolean {
         val edsmPlayer = EDSMPlayer(context)
         val inaraPlayer = InaraPlayer(context)

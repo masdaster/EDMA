@@ -28,6 +28,7 @@ class FrontierPlayer(val context: Context) : PlayerNetwork {
     private var cachedCredits: CommanderCredits? = null
     private var cachedPosition: CommanderPosition? = null
     private var cachedFleet: CommanderFleet? = null
+    private var cachedCurrentShip: Ship? = null
 
     override fun isUsable(): Boolean {
         return SettingsUtils.getBoolean(
@@ -123,19 +124,17 @@ class FrontierPlayer(val context: Context) : PlayerNetwork {
             val profileResponse = Gson()
                 .fromJson(rawResponse, FrontierProfileResponse::class.java)
 
-            cachedPosition = CommanderPosition(
-                profileResponse.LastSystem.Name,
-                false
-            )
-            cachedCredits =
-                CommanderCredits(profileResponse.Commander.Credits, profileResponse.Commander.Debt)
+            cachedPosition = CommanderPosition(profileResponse.LastSystem.Name, false)
+            cachedCredits = CommanderCredits(profileResponse.Commander.Credits, profileResponse.Commander.Debt)
             cachedRanks = getRanksFromApiResponse(profileResponse)
             cachedFleet = getFleetFromApiResponse(rawResponse)
+            cachedCurrentShip = getCurrentShipFromApiResponse(rawResponse)
         } catch (t: FrontierAuthNeededException) {
             lastFetch = Instant.MIN
             cachedCredits = null
             cachedRanks = null
             cachedFleet = null
+            cachedCurrentShip = null
             throw t
         }
     }
@@ -158,37 +157,73 @@ class FrontierPlayer(val context: Context) : PlayerNetwork {
             }
         }
 
-        val shipsList: MutableList<Ship> = ArrayList()
+        val shipsList: MutableList<ShipInformation> = ArrayList()
 
         for (entry in responseList) {
-            val rawShip = entry.asJsonObject
-            var shipName: String? = null
-            if (rawShip.has("shipName")) {
-                shipName = rawShip["shipName"].asString
-            }
-            val value = rawShip["value"].asJsonObject
-            val isCurrentShip = rawShip["id"].asInt == currentShipId
-            val newShip = Ship(
-                rawShip["id"].asInt,
-                InternalNamingUtils.getShipName(rawShip["name"].asString),
-                rawShip["name"].asString.lowercase(),
-                shipName,
-                rawShip["starsystem"].asJsonObject["name"].asString,
-                rawShip["station"].asJsonObject["name"].asString,
-                value["hull"].asLong,
-                value["modules"].asLong,
-                value["cargo"].asLong,
-                value["total"].asLong,
-                isCurrentShip
-            )
-            if (isCurrentShip) {
-                shipsList.add(0, newShip)
+            val newShipInformation = createShipInformation(entry.asJsonObject, currentShipId)
+            if (newShipInformation.isCurrentShip) {
+                shipsList.add(0, newShipInformation)
             } else {
-                shipsList.add(newShip)
+                shipsList.add(newShipInformation)
             }
         }
 
         return CommanderFleet(shipsList)
+    }
+
+    private fun createShipInformation(rawShip: JsonObject, currentShipId: Int): ShipInformation{
+        var shipName: String? = null
+        if (rawShip.has("shipName")) {
+            shipName = rawShip["shipName"].asString
+        }
+        val value = rawShip["value"].asJsonObject
+        val isCurrentShip = rawShip["id"].asInt == currentShipId
+        return ShipInformation(
+            rawShip["id"].asInt,
+            InternalNamingUtils.getShipName(rawShip["name"].asString),
+            rawShip["name"].asString.lowercase(),
+            shipName,
+            rawShip["starsystem"].asJsonObject["name"].asString,
+            rawShip["station"].asJsonObject["name"].asString,
+            value["hull"].asLong,
+            value["modules"].asLong,
+            value["cargo"].asLong,
+            value["total"].asLong,
+            isCurrentShip
+        )
+    }
+
+    private fun getCurrentShipFromApiResponse(profileResponse: JsonObject): Ship {
+        val rawShip = profileResponse.get("ship").asJsonObject
+        val rawShipHealth = rawShip.get("health").asJsonObject
+
+        return Ship(
+            createShipInformation(rawShip, rawShip["id"].asInt),
+            ShipState(
+                rawShip["alive"].asBoolean,
+                rawShip["cockpitBreached"].asBoolean,
+                rawShipHealth["hull"].asInt,
+                rawShipHealth["integrity"].asInt,
+                rawShipHealth["paintwork"].asInt,
+                rawShipHealth["shield"].asInt,
+                rawShipHealth["shieldup"].asBoolean,
+                rawShip["oxygenRemaining"].asInt
+            ),
+            rawShip
+        )
+    }
+
+    suspend fun getCurrentShip(): ProxyResult<Ship> {
+        if (!shouldFetchNewData() && cachedCurrentShip != null) {
+            return ProxyResult(cachedCurrentShip)
+        }
+
+        return try {
+            getProfile()
+            ProxyResult(cachedCurrentShip)
+        } catch (t: Throwable) {
+            ProxyResult(data = null, error = t)
+        }
     }
 
     override suspend fun getRanks(): ProxyResult<CommanderRanks> {

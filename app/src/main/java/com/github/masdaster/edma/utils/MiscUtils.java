@@ -7,13 +7,16 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Html;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.app.ActivityOptionsCompat;
 
+import com.bumptech.glide.Glide;
 import com.github.masdaster.edma.R;
 import com.github.masdaster.edma.activities.SystemDetailsActivity;
+import com.github.masdaster.edma.models.ShipInformation;
 
 public class MiscUtils {
 
@@ -62,5 +65,10 @@ public class MiscUtils {
         } else {
             textView.setText(Html.fromHtml(text));
         }
+    }
+
+    public static void loadShipImage(ImageView imageView, ShipInformation shipInformation) {
+        String shipUrl = String.format("https://ed.9cw.eu/ships/%s/picture", shipInformation.getInternalModel());
+        Glide.with(imageView).load(shipUrl).error(R.drawable.ship_placeholder).centerCrop().into(imageView);
     }
 }
