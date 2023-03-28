@@ -54,7 +54,7 @@
                 android:layout_marginTop="8dp"
                 android:hint="@string/commodity">
 
-                <fr.corenting.edcompanion.views.DelayAutoCompleteTextView
+                <com.github.masdaster.edma.views.DelayAutoCompleteTextView
                     android:id="@+id/commodityInputEditText"
                     style="@style/Widget.Material3.TextInputEditText.OutlinedBox.Dense"
                     android:layout_width="match_parent"

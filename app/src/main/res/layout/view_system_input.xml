@@ -22,7 +22,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <fr.corenting.edcompanion.views.DelayAutoCompleteTextView
+            <com.github.masdaster.edma.views.DelayAutoCompleteTextView
                 android:id="@+id/systemInputEditText"
                 style="@style/Widget.Material3.TextInputEditText.OutlinedBox.Dense"
                 android:layout_width="match_parent"

@@ -1,0 +1,162 @@
+package com.github.masdaster.edma.network;
+
+import android.content.Context;
+
+import org.greenrobot.eventbus.EventBus;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.github.masdaster.edma.models.CommoditiesListResult;
+import com.github.masdaster.edma.models.CommodityBestPricesStationResult;
+import com.github.masdaster.edma.models.CommodityDetailsResult;
+import com.github.masdaster.edma.models.apis.EDAPIV4.CommodityBestPricesResponse;
+import com.github.masdaster.edma.models.apis.EDAPIV4.CommodityWithPriceResponse;
+import com.github.masdaster.edma.models.events.CommodityBestPrices;
+import com.github.masdaster.edma.models.events.CommodityDetails;
+import com.github.masdaster.edma.models.events.ResultsList;
+import com.github.masdaster.edma.network.retrofit.EDApiV4Retrofit;
+import com.github.masdaster.edma.singletons.RetrofitSingleton;
+import retrofit2.Call;
+import retrofit2.internal.EverythingIsNonNull;
+
+
+public class CommoditiesNetwork {
+    public static void getCommoditiesPrices(Context ctx, String commodityName) {
+        // Init retrofit instance
+        final EDApiV4Retrofit edApiRetrofit = RetrofitSingleton.getInstance()
+                .getEdApiV4Retrofit(ctx.getApplicationContext());
+
+        final retrofit2.Callback<List<CommodityWithPriceResponse>> callback = new retrofit2.Callback<List<CommodityWithPriceResponse>>() {
+            @Override
+            @EverythingIsNonNull
+            public void onResponse(Call<List<CommodityWithPriceResponse>> call,
+                                   retrofit2.Response<List<CommodityWithPriceResponse>> response) {
+
+                List<CommodityWithPriceResponse> body = response.body();
+                ResultsList<CommoditiesListResult> convertedResults;
+                if (!response.isSuccessful() || body == null) {
+                    onFailure(call, new Exception("Invalid response"));
+                } else {
+                    List<CommoditiesListResult> resultsList = new ArrayList<>();
+                    try {
+                        for (CommodityWithPriceResponse resultItem : body) {
+                            resultsList.add(
+                                    CommoditiesListResult.Companion.fromEDApiCommodityPrice(resultItem)
+                            );
+                        }
+                        convertedResults = new ResultsList<>(true, resultsList);
+
+                    } catch (Exception ex) {
+                        convertedResults = new ResultsList<>(false,
+                                new ArrayList<>());
+                    }
+                    EventBus.getDefault().post(convertedResults);
+                }
+            }
+
+            @Override
+            @EverythingIsNonNull
+            public void onFailure(Call<List<CommodityWithPriceResponse>> call, Throwable t) {
+                EventBus.getDefault().post(new ResultsList<>(false,
+                        new ArrayList<CommoditiesListResult>()));
+            }
+        };
+
+        edApiRetrofit.getCommoditiesWithPrice(commodityName).enqueue(callback);
+    }
+
+    public static void getCommodityDetails(Context ctx, String commodityName) {
+
+        // Init retrofit instance
+        final EDApiV4Retrofit edApiRetrofit = RetrofitSingleton.getInstance()
+                .getEdApiV4Retrofit(ctx.getApplicationContext());
+
+        final retrofit2.Callback<CommodityWithPriceResponse> callback = new retrofit2.Callback<CommodityWithPriceResponse>() {
+            @Override
+            @EverythingIsNonNull
+            public void onResponse(Call<CommodityWithPriceResponse> call,
+                                   retrofit2.Response<CommodityWithPriceResponse> response) {
+
+                CommodityWithPriceResponse body = response.body();
+                CommodityDetails resultEvent;
+                if (!response.isSuccessful() || body == null) {
+                    onFailure(call, new Exception("Invalid response"));
+                } else {
+                    try {
+                        CommodityDetailsResult convertedResult = CommodityDetailsResult.Companion
+                                .fromEDApiCommodityDetails(body);
+                        resultEvent = new CommodityDetails(true, convertedResult);
+
+                    } catch (Exception ex) {
+                        resultEvent = new CommodityDetails(false, null);
+
+                    }
+                    EventBus.getDefault().post(resultEvent);
+                }
+            }
+
+            @Override
+            @EverythingIsNonNull
+            public void onFailure(Call<CommodityWithPriceResponse> call, Throwable t) {
+                EventBus.getDefault().post(new CommodityDetails(false, null));
+
+            }
+        };
+
+        edApiRetrofit.getCommodityPrice(commodityName).enqueue(callback);
+    }
+
+    public static void getCommoditiesBestPrices(Context ctx, String commodityName) {
+
+        // Init retrofit instance
+        final EDApiV4Retrofit edApiRetrofit = RetrofitSingleton.getInstance()
+                .getEdApiV4Retrofit(ctx.getApplicationContext());
+
+        final retrofit2.Callback<CommodityBestPricesResponse> callback = new retrofit2.Callback<CommodityBestPricesResponse>() {
+            @Override
+            @EverythingIsNonNull
+            public void onResponse(Call<CommodityBestPricesResponse> call,
+                                   retrofit2.Response<CommodityBestPricesResponse> response) {
+
+                CommodityBestPricesResponse body = response.body();
+
+                // Failure case
+                if (!response.isSuccessful() || body == null) {
+                    onFailure(call, new Exception("Invalid response"));
+                } else {
+
+                    try {
+                        // Get stations for buy
+                        List<CommodityBestPricesStationResult> stationsToBuy = new ArrayList<>();
+                        for (CommodityBestPricesResponse.CommodityBestPricesStationResponse resultItem : body.BestStationsToBuy) {
+                            stationsToBuy.add(
+                                    CommodityBestPricesStationResult.Companion.fromEDApiCommodityBestPricesStation(resultItem)
+                            );
+                        }
+
+                        // Get stations for sell
+                        List<CommodityBestPricesStationResult> stationsToSell = new ArrayList<>();
+                        for (CommodityBestPricesResponse.CommodityBestPricesStationResponse resultItem : body.BestStationsToSell) {
+                            stationsToSell.add(
+                                    CommodityBestPricesStationResult.Companion.fromEDApiCommodityBestPricesStation(resultItem)
+                            );
+                        }
+
+                        EventBus.getDefault().post(new CommodityBestPrices(true, stationsToBuy, stationsToSell));
+                    } catch (Exception ex) {
+                        EventBus.getDefault().post(new CommodityBestPrices(false, new ArrayList<>(), new ArrayList<>()));
+                    }
+                }
+            }
+
+            @Override
+            @EverythingIsNonNull
+            public void onFailure(Call<CommodityBestPricesResponse> call, Throwable t) {
+                EventBus.getDefault().post(new CommodityBestPrices(false, new ArrayList<>(), new ArrayList<>()));
+            }
+        };
+
+        edApiRetrofit.getCommodityBestPrices(commodityName).enqueue(callback);
+    }
+}

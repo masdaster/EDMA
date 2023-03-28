@@ -23,7 +23,7 @@
 -keepattributes Signature
 -keepattributes *Annotation*
 -dontwarn sun.misc.**
--keep class fr.corenting.edcompanion.models.** { <fields>; }
+-keep class com.github.masdaster.edma.models.** { <fields>; }
 -keep class * implements com.google.gson.TypeAdapter
 -keep class * implements com.google.gson.TypeAdapterFactory
 -keep class * implements com.google.gson.JsonSerializer

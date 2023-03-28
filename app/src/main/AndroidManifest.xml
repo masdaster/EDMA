@@ -85,7 +85,7 @@
             android:label="@string/title_activity_settings">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="fr.corenting.edcompanion.activities.MainActivity" />
+                android:value="com.github.masdaster.edma.activities.MainActivity" />
         </activity>
     </application>
 

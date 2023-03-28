@@ -44,7 +44,7 @@
                 android:text="@string/distance_calculator_subtitle"
                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
-            <fr.corenting.edcompanion.views.SystemInputView
+            <com.github.masdaster.edma.views.SystemInputView
                 android:id="@+id/firstSystemInputView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -53,7 +53,7 @@
                 app:cacheKey="@string/first_system_cache_key"
                 app:hint="@string/first_system" />
 
-            <fr.corenting.edcompanion.views.SystemInputView
+            <com.github.masdaster.edma.views.SystemInputView
                 android:id="@+id/secondSystemInputView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
