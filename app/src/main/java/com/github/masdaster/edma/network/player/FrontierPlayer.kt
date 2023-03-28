@@ -28,6 +28,7 @@ class FrontierPlayer(val context: Context) : PlayerNetwork {
     private var cachedCredits: CommanderCredits? = null
     private var cachedPosition: CommanderPosition? = null
     private var cachedFleet: CommanderFleet? = null
+    private var cachedLoadOutList: CommanderLoadOutList? = null
     private var cachedCurrentShip: Ship? = null
 
     override fun isUsable(): Boolean {
@@ -129,12 +130,14 @@ class FrontierPlayer(val context: Context) : PlayerNetwork {
             cachedRanks = getRanksFromApiResponse(profileResponse)
             cachedFleet = getFleetFromApiResponse(rawResponse)
             cachedCurrentShip = getCurrentShipFromApiResponse(rawResponse)
+            cachedLoadOutList = getLoadOutListFromApiResponse(rawResponse)
         } catch (t: FrontierAuthNeededException) {
             lastFetch = Instant.MIN
             cachedCredits = null
             cachedRanks = null
             cachedFleet = null
             cachedCurrentShip = null
+            cachedLoadOutList = null
             throw t
         }
     }
@@ -213,6 +216,58 @@ class FrontierPlayer(val context: Context) : PlayerNetwork {
         )
     }
 
+    private fun createSuit(rawSuit: JsonObject): Suit{
+        val suitName = rawSuit["name"].asString
+        val type = suitName.substringBefore('_')
+        val className = suitName.substringAfter('_', "")
+        return Suit(
+            rawSuit["locName"].asString,
+            type,
+            if(className.isEmpty()) -1 else className.last().digitToInt()
+        )
+    }
+
+    private fun createLoadOutInformation(rawLoadOut: JsonObject, currentLoadOutSlotId: Int): CommanderLoadOutInformation {
+        val loadOutSlotId = rawLoadOut["loadoutSlotId"].asInt
+        var loadOutName: String? = null
+        if (rawLoadOut.has("name")) {
+            loadOutName = rawLoadOut["name"].asString
+        }
+        return CommanderLoadOutInformation(
+            loadOutSlotId,
+            loadOutName,
+            createSuit(rawLoadOut.getAsJsonObject("suit")),
+            loadOutSlotId == currentLoadOutSlotId
+        )
+    }
+
+    private fun getLoadOutListFromApiResponse(profileResponse: JsonObject): CommanderLoadOutList {
+        val currentLoadOutSlotId: Int = profileResponse.getAsJsonObject("loadout")["loadoutSlotId"].asInt
+
+        // Sometimes the cAPI return an array, sometimes an object with indexes
+        val responseList: MutableList<JsonElement> = ArrayList()
+        if (profileResponse.get("loadouts").isJsonObject) {
+            for ((_, value) in profileResponse.get("loadouts").asJsonObject.entrySet()) {
+                responseList.add(value)
+            }
+        } else {
+            for (loadout in profileResponse.get("loadouts").asJsonArray) {
+                responseList.add(loadout)
+            }
+        }
+
+        val loadOutList: MutableList<CommanderLoadOutInformation> = ArrayList()
+        for (entry in responseList) {
+            val loadOutInformation = createLoadOutInformation(entry.asJsonObject, currentLoadOutSlotId)
+            if (loadOutInformation.isCurrentLoadOut) {
+                loadOutList.add(0, loadOutInformation)
+            } else {
+                loadOutList.add(loadOutInformation)
+            }
+        }
+        return CommanderLoadOutList(loadOutList)
+    }
+
     suspend fun getCurrentShip(): ProxyResult<Ship> {
         if (!shouldFetchNewData() && cachedCurrentShip != null) {
             return ProxyResult(cachedCurrentShip)
@@ -260,6 +315,19 @@ class FrontierPlayer(val context: Context) : PlayerNetwork {
         return try {
             getProfile()
             ProxyResult(cachedFleet)
+        } catch (t: Throwable) {
+            ProxyResult(data = null, error = t)
+        }
+    }
+
+    suspend fun getLoadOutList(): ProxyResult<CommanderLoadOutList> {
+        if (!shouldFetchNewData() && cachedLoadOutList != null) {
+            return ProxyResult(cachedLoadOutList)
+        }
+
+        return try {
+            getProfile()
+            ProxyResult(cachedLoadOutList)
         } catch (t: Throwable) {
             ProxyResult(data = null, error = t)
         }

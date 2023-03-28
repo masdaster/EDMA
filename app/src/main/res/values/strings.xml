@@ -75,6 +75,9 @@
     <string name="ship_cockpit_breached">Cockpit breached</string>
     <string name="ship_oxygen_remaining">Oxygen remaining</string>
     <string name="ship_shield_up">Shield up</string>
+    <string name="load_out_list">Suits</string>
+    <string name="current_load_out">Current load out</string>
+    <string name="grade">Grade</string>
 
     <!--Ranks-->
     <string name="rank_federation">Federation</string>

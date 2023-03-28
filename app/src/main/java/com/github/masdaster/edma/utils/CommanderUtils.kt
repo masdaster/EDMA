@@ -24,6 +24,15 @@ object CommanderUtils {
         return false
     }
 
+    fun hasLoadOutListData(context: Context): Boolean {
+        val frontierPlayer = FrontierPlayer(context)
+        if (frontierPlayer.isUsable()) {
+            return true
+        }
+
+        return false
+    }
+
     fun hasCreditsData(context: Context): Boolean {
         val edsmPlayer = EDSMPlayer(context)
         if (edsmPlayer.isUsable()) {

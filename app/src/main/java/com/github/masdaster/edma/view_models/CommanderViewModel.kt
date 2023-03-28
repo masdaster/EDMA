@@ -23,6 +23,7 @@ class CommanderViewModel(application: Application) : AndroidViewModel(applicatio
     private val ranks = MutableLiveData<ProxyResult<CommanderRanks>>()
     private val fleet = MutableLiveData<ProxyResult<CommanderFleet>>()
     private val currentShip = MutableLiveData<ProxyResult<Ship>>()
+    private val loadOutList = MutableLiveData<ProxyResult<CommanderLoadOutList>>()
 
     fun clearCachedData() {
         // We set the values to a null result with a specific exception to mark it as not initialized
@@ -32,6 +33,7 @@ class CommanderViewModel(application: Application) : AndroidViewModel(applicatio
             ranks.postValue(ProxyResult(null, DataNotInitializedException()))
             fleet.postValue(ProxyResult(null, DataNotInitializedException()))
             currentShip.postValue(ProxyResult(null, DataNotInitializedException()))
+            loadOutList.postValue(ProxyResult(null, DataNotInitializedException()))
         }
     }
 
@@ -134,5 +136,17 @@ class CommanderViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun getCurrentShip(): LiveData<ProxyResult<Ship>> {
         return currentShip
+    }
+
+    fun fetchLoadOutList() {
+        if (frontierPlayer.isUsable()) {
+            viewModelScope.launch {
+                loadOutList.postValue(frontierPlayer.getLoadOutList())
+            }
+        }
+    }
+
+    fun getLoadOutList(): LiveData<ProxyResult<CommanderLoadOutList>> {
+        return loadOutList
     }
 }

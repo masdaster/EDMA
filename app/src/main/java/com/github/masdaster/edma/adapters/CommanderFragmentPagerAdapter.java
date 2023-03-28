@@ -9,6 +9,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.github.masdaster.edma.R;
 import com.github.masdaster.edma.fragments.CommanderFleetFragment;
+import com.github.masdaster.edma.fragments.CommanderLoadOutListFragment;
 import com.github.masdaster.edma.fragments.CommanderStatusFragment;
 import com.github.masdaster.edma.utils.CommanderUtils;
 
@@ -25,7 +26,10 @@ public class CommanderFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return CommanderUtils.INSTANCE.hasFleetData(context) ? 2 : 1;
+        int count = 1;
+        count += CommanderUtils.INSTANCE.hasFleetData(context) ? 1 : 0;
+        count += CommanderUtils.INSTANCE.hasLoadOutListData(context) ? 1 : 0;
+        return count;
     }
 
     @NonNull
@@ -40,24 +44,36 @@ public class CommanderFragmentPagerAdapter extends FragmentPagerAdapter {
         }
 
         // Else return new one
-        if (position == 1) {
-            return new CommanderFleetFragment();
+        switch (position){
+            default:
+                return new CommanderStatusFragment();
+            case 1:
+                return new CommanderFleetFragment();
+            case 2:
+                return new CommanderLoadOutListFragment();
         }
-        return new CommanderStatusFragment();
     }
 
     @Override
     public CharSequence getPageTitle(int position) {
-        if (position == 1) {
-            return context.getString(R.string.fleet);
+        switch (position){
+            default:
+                return context.getString(R.string.commander);
+            case 1:
+                return context.getString(R.string.fleet);
+            case 2:
+                return context.getString(R.string.load_out_list);
         }
-        return context.getString(R.string.commander);
     }
 
     private String getTag(int position) {
-        if (position == 1) {
-            return CommanderFleetFragment.COMMANDER_FLEET_FRAGMENT_TAG;
+        switch (position){
+            default:
+                return CommanderStatusFragment.COMMANDER_STATUS_FRAGMENT;
+            case 1:
+                return CommanderFleetFragment.COMMANDER_FLEET_FRAGMENT_TAG;
+            case 2:
+                return CommanderLoadOutListFragment.COMMANDER_LOAD_OUT_LIST_FRAGMENT_TAG;
         }
-        return CommanderStatusFragment.COMMANDER_STATUS_FRAGMENT;
     }
 }
