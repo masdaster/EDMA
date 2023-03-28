@@ -69,20 +69,4 @@
         </androidx.preference.PreferenceCategory>
     </androidx.preference.PreferenceCategory>
 
-    <androidx.preference.PreferenceCategory app:title="@string/settings_notifications_category_title">
-        <androidx.preference.SwitchPreference
-            app:key="@string/settings_notifications_new_goal"
-            app:summary="@string/settings_notifications_new_goal_summary"
-            app:title="@string/settings_notifications_new_goal" />
-        <androidx.preference.SwitchPreference
-            app:key="@string/settings_notifications_new_tier"
-            app:summary="@string/settings_notifications_new_tier_summary"
-            app:title="@string/settings_notifications_new_tier" />
-        <androidx.preference.SwitchPreference
-            app:key="@string/settings_notifications_finished_goal"
-            app:summary="@string/settings_notifications_finished_goal_summary"
-            app:title="@string/settings_notifications_finished_goal" />
-    </androidx.preference.PreferenceCategory>
-
-
 </androidx.preference.PreferenceScreen>

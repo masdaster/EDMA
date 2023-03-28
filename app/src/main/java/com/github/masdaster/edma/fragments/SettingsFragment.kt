@@ -9,14 +9,11 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import com.github.masdaster.edma.R
 import com.github.masdaster.edma.activities.LoginActivity
-import com.github.masdaster.edma.utils.NotificationsUtils
 
 class SettingsFragment : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         addPreferencesFromResource(R.xml.pref_settings)
-
-        initPushPreferences()
         initCmdrPreferences()
     }
 
@@ -45,48 +42,6 @@ class SettingsFragment : PreferenceFragmentCompat() {
             activity?.startActivityForResult(i, FRONTIER_LOGIN_REQUEST_CODE)
             true
         }
-    }
-
-    private fun initPushPreferences() { // Get preferences
-        val newGoalPreference =
-            findPreference<Preference>(getString(R.string.settings_notifications_new_goal))
-        val newTierPreference =
-            findPreference<Preference>(getString(R.string.settings_notifications_new_tier))
-        val finishedGoalPreference =
-            findPreference<Preference>(getString(R.string.settings_notifications_finished_goal))
-
-        // Disable push notifications settings if Google Play Services are not available
-        if (NotificationsUtils.pushNotificationsNotWorking(context)) {
-            disablePushPreference(newGoalPreference)
-            disablePushPreference(newTierPreference)
-            disablePushPreference(finishedGoalPreference)
-        }
-
-        // Change Firebase subscriptions on preference change
-        val context = context
-        val notificationsChangeListener =
-            Preference.OnPreferenceChangeListener { preference: Preference, newValue: Any? ->
-                NotificationsUtils.refreshPushSubscription(
-                    context,
-                    preference.key,
-                    (newValue as Boolean?)!!
-                )
-                true
-            }
-        if (newGoalPreference != null) {
-            newGoalPreference.onPreferenceChangeListener = notificationsChangeListener
-        }
-        if (newTierPreference != null) {
-            newTierPreference.onPreferenceChangeListener = notificationsChangeListener
-        }
-        if (finishedGoalPreference != null) {
-            finishedGoalPreference.onPreferenceChangeListener = notificationsChangeListener
-        }
-    }
-
-    private fun disablePushPreference(preference: Preference?) {
-        preference?.isEnabled = false
-        preference?.summary = getString(R.string.settings_notifications_error_summary)
     }
 
     companion object {

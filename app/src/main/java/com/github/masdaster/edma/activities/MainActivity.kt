@@ -76,8 +76,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .findViewById<TextView>(R.id.drawerSubtitleTextView)
         drawerSubtitleTextView.setOnClickListener { updateServerStatus() }
 
-        // Push notifications setup
-        NotificationsUtils.refreshPushSubscriptions(this)
 
         // Show changelog
         ChangelogUtils.showChangelog(this)
