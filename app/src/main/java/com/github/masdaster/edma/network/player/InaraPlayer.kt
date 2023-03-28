@@ -20,8 +20,10 @@ class InaraPlayer(val context: Context) : PlayerNetwork {
         .getInaraRetrofit(context.applicationContext)
     private val apiKey =
         SettingsUtils.getString(context, context.getString(R.string.settings_cmdr_inara_api_key))
-
-    private var commanderName = context.getString(R.string.commander)
+    private val commanderName = SettingsUtils.getString(
+        context,
+        context.getString(R.string.settings_cmdr_name)
+    )
 
     override fun isUsable(): Boolean {
         val enabled =
@@ -30,10 +32,6 @@ class InaraPlayer(val context: Context) : PlayerNetwork {
                 context.getString(R.string.settings_cmdr_inara_enable)
             )
         return enabled && !apiKey.isNullOrEmpty()
-    }
-
-    override fun getCommanderName(): String {
-        return commanderName
     }
 
     private fun buildRequestBody(): InaraProfileRequestBody {
@@ -45,6 +43,7 @@ class InaraPlayer(val context: Context) : PlayerNetwork {
         res.header.ApplicationName = context.getString(R.string.app_name)
         res.header.ApplicationVersion = BuildConfig.VERSION_NAME
         res.header.IsBeingDeveloped = BuildConfig.DEBUG
+        res.header.CommanderName = commanderName
 
         // Build event
         val profileEvent = InaraRequestBodyEvent()
@@ -122,7 +121,6 @@ class InaraPlayer(val context: Context) : PlayerNetwork {
                 }
             }
 
-            commanderName = apiRanks.events[0].EventData.CommanderName
             ProxyResult(
                 data = CommanderRanks(
                     combatRank,

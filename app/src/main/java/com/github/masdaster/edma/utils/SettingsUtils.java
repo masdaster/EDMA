@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+import androidx.annotation.StringRes;
+
 public class SettingsUtils {
     public static boolean getBoolean(Context c, String key) {
         return PreferenceManager.getDefaultSharedPreferences(c)
@@ -24,8 +26,16 @@ public class SettingsUtils {
     }
 
     public static String getString(Context c, String key) {
+        return getString(c, key, "");
+    }
+
+    public static String getString(Context c, String key, @StringRes int defValue) {
+        return getString(c, key, c.getString(defValue));
+    }
+
+    public static String getString(Context c, String key, String defValue) {
         return PreferenceManager.getDefaultSharedPreferences(c)
-                .getString(key, "");
+                .getString(key, defValue);
     }
 
 
