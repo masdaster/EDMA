@@ -39,7 +39,7 @@
 
                 <data
                     android:host="oauth"
-                    android:scheme="edcompanion" />
+                    android:scheme="edma" />
             </intent-filter>
         </activity>
         <activity

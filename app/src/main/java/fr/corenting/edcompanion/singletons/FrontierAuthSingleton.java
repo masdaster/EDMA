@@ -93,7 +93,7 @@ public class FrontierAuthSingleton implements Serializable {
                 "&client_id=" + BuildConfig.FRONTIER_AUTH_CLIENT_ID +
                 "&code_challenge=" + codeChallenge +
                 "&code_challenge_method=S256" +
-                "&redirect_uri=edcompanion://oauth";
+                "&redirect_uri=edma://oauth";
     }
 
     public void sendTokensRequest(Context ctx, String authCode, String state) {

@@ -51,7 +51,7 @@ public class OAuthUtils {
         requestBody.GrantType = "authorization_code";
         requestBody.ClientId = BuildConfig.FRONTIER_AUTH_CLIENT_ID;
         requestBody.Code = authCode;
-        requestBody.RedirectUri = "edcompanion://oauth";
+        requestBody.RedirectUri = "edma://oauth";
 
         return requestBody;
     }

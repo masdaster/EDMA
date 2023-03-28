@@ -1,16 +1,13 @@
-# EDCompanion
+# EDMobileAssistant (EDMA)
 
-[![GitHub release](https://img.shields.io/github/release/corenting/EDCompanion.svg)](https://github.com/corenting/EDCompanion/releases)
-[![GitHub license](https://img.shields.io/github/license/corenting/EDCompanion.svg)](https://github.com/corenting/EDCompanion/blob/master/LICENSE)
+[![GitHub release](https://img.shields.io/github/release/corenting/EDCompanion.svg)](https://github.com/masdaster/EDMA/releases)
+[![GitHub license](https://img.shields.io/github/license/corenting/EDCompanion.svg)](https://github.com/masdaster/EDMA/blob/master/LICENSE)
 
-An unofficial Android companion app for Elite : Dangerous.
-
-Website : https://edcompanion.corenting.fr
+An unofficial Android app for Elite Dangerous based on [EDCompanion](https://github.com/corenting/EDCompanion) from [corenting](https://github.com/corenting).
 
 ## Download
 
-APKs are available [in the release section](https://github.com/corenting/EDCompanion/releases) or in
-the [Play Store](https://play.google.com/store/apps/details?id=fr.corenting.edcompanion)
+APKs are available [in the release section](https://github.com/masdaster/EDMA/releases).
 
 ## Features
 

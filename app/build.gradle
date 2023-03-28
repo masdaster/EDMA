@@ -8,7 +8,7 @@ android {
     buildToolsVersion "33.0.2"
 
     defaultConfig {
-        applicationId "fr.corenting.edcompanion"
+        applicationId "fr.corenting.edma"
         minSdkVersion 21
         targetSdkVersion 33
         versionCode 65
@@ -41,7 +41,7 @@ android {
             multiDexEnabled true
         }
     }
-    namespace 'fr.corenting.edcompanion'
+    namespace 'fr.corenting.edma'
 }
 
 dependencies {
