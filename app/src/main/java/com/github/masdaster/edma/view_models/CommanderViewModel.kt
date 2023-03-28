@@ -34,7 +34,7 @@ class CommanderViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun fetchCredits() {
-        val servicesToTries = listOf(edsmPlayer, frontierPlayer)
+        val servicesToTries = listOf(frontierPlayer, edsmPlayer)
         viewModelScope.launch {
             for ((index, service) in servicesToTries.withIndex()) {
                 if (!service.isUsable()) {
@@ -65,7 +65,7 @@ class CommanderViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun fetchPosition() {
-        val servicesToTries = listOf(edsmPlayer, frontierPlayer)
+        val servicesToTries = listOf(frontierPlayer, edsmPlayer)
 
         viewModelScope.launch {
             for ((index, service) in servicesToTries.withIndex()) {
@@ -89,7 +89,7 @@ class CommanderViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun fetchRanks() {
-        val servicesToTries = listOf(edsmPlayer, inaraPlayer, frontierPlayer)
+        val servicesToTries = listOf(inaraPlayer, frontierPlayer, edsmPlayer)
 
         viewModelScope.launch {
             for ((index, service) in servicesToTries.withIndex()) {
