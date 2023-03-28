@@ -23,6 +23,7 @@ import com.github.masdaster.edma.view_models.CommanderViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.ByteArrayOutputStream
 import java.util.zip.GZIPOutputStream
+import kotlin.math.round
 
 class CommanderStatusFragment : Fragment() {
 
@@ -88,6 +89,7 @@ class CommanderStatusFragment : Fragment() {
         viewModel.getCredits().observe(viewLifecycleOwner, ::onCreditsChange)
         viewModel.getPosition().observe(viewLifecycleOwner, ::onPositionChange)
         viewModel.getCurrentShip().observe(viewLifecycleOwner, ::onCurrentShipChange)
+        viewModel.getCurrentLoadOut().observe(viewLifecycleOwner, ::onCurrentLoadOutChange)
 
         // Display message if no source, else fetch informations
         if (currentContext != null) {
@@ -170,6 +172,7 @@ class CommanderStatusFragment : Fragment() {
         viewModel.fetchPosition()
         viewModel.fetchRanks()
         viewModel.fetchCurrentShip()
+        viewModel.fetchCurrentLoadOut()
     }
 
     private fun <T> handleResult(result: ProxyResult<T>, onSuccess: (ProxyResult<T>) -> Unit) {
@@ -330,6 +333,30 @@ class CommanderStatusFragment : Fragment() {
                     ))
                 }
             }
+        }
+    }
+
+    private fun onCurrentLoadOutChange(result: ProxyResult<CommanderLoadOut>) {
+        handleResult(result) {
+            if (result.data == null) {
+                return@handleResult
+            }
+
+            val loadOutInformation = result.data.information
+            val loadOutState = result.data.state
+            val suit = loadOutInformation.suit
+
+            MiscUtils.loadLoadOutImage(binding.currentLoadOutImageView, suit)
+            binding.currentLoadOutTitleTextView.text = suit.name
+            if (loadOutInformation.name != null && loadOutInformation.name != suit.name) {
+                binding.currentLoadOutSubtitleTextView.visibility = View.VISIBLE
+                binding.currentLoadOutSubtitleTextView.text = loadOutInformation.name
+            } else {
+                binding.currentLoadOutSubtitleTextView.visibility = View.GONE
+            }
+            binding.currentLoadOutHullHealthTextView.text = "${MathUtils.divAndRound(loadOutState.hullHealth,10000)}%"
+            binding.currentLoadOutOxygenRemainingTextView.text = "${MathUtils.divAndRound(loadOutState.oxygenRemaining, 1000)}s"
+            binding.currentLoadOutEnergyTextView.text = "${round(loadOutState.energy*100).toInt()}%"
         }
     }
 

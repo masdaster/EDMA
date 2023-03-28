@@ -30,6 +30,7 @@ class FrontierPlayer(val context: Context) : PlayerNetwork {
     private var cachedFleet: CommanderFleet? = null
     private var cachedLoadOutList: CommanderLoadOutList? = null
     private var cachedCurrentShip: Ship? = null
+    private var cachedCurrentLoadOut: CommanderLoadOut? = null
 
     override fun isUsable(): Boolean {
         return SettingsUtils.getBoolean(
@@ -131,6 +132,7 @@ class FrontierPlayer(val context: Context) : PlayerNetwork {
             cachedFleet = getFleetFromApiResponse(rawResponse)
             cachedCurrentShip = getCurrentShipFromApiResponse(rawResponse)
             cachedLoadOutList = getLoadOutListFromApiResponse(rawResponse)
+            cachedCurrentLoadOut = getCurrentLoadOutFromApiResponse(rawResponse)
         } catch (t: FrontierAuthNeededException) {
             lastFetch = Instant.MIN
             cachedCredits = null
@@ -138,6 +140,7 @@ class FrontierPlayer(val context: Context) : PlayerNetwork {
             cachedFleet = null
             cachedCurrentShip = null
             cachedLoadOutList = null
+            cachedCurrentLoadOut = null
             throw t
         }
     }
@@ -266,6 +269,34 @@ class FrontierPlayer(val context: Context) : PlayerNetwork {
             }
         }
         return CommanderLoadOutList(loadOutList)
+    }
+
+    private fun getCurrentLoadOutFromApiResponse(profileResponse: JsonObject): CommanderLoadOut {
+        val rawLoadOut = profileResponse.getAsJsonObject("loadout")
+        val rawLoadOutState = rawLoadOut.getAsJsonObject("state")
+        val rawSuitHealth = profileResponse.getAsJsonObject("suit").getAsJsonObject("state").getAsJsonObject("health")
+
+        return CommanderLoadOut(
+            createLoadOutInformation(rawLoadOut, rawLoadOut["loadoutSlotId"].asInt),
+            CommanderLoadOutState(
+                rawSuitHealth["hull"].asInt,
+                rawLoadOutState["oxygenRemaining"].asInt,
+                rawLoadOutState["energy"].asDouble
+            )
+        )
+    }
+
+    suspend fun getCurrentLoadOut(): ProxyResult<CommanderLoadOut> {
+        if (!shouldFetchNewData() && cachedCurrentLoadOut != null) {
+            return ProxyResult(cachedCurrentLoadOut)
+        }
+
+        return try {
+            getProfile()
+            ProxyResult(cachedCurrentLoadOut)
+        } catch (t: Throwable) {
+            ProxyResult(data = null, error = t)
+        }
     }
 
     suspend fun getCurrentShip(): ProxyResult<Ship> {

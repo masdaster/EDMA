@@ -77,6 +77,8 @@
     <string name="ship_shield_up">Shield up</string>
     <string name="load_out_list">Suits</string>
     <string name="current_load_out">Current load out</string>
+    <string name="load_out_hull_health">Suit health</string>
+    <string name="load_out_energy">Energy</string>
     <string name="grade">Grade</string>
 
     <!--Ranks-->

@@ -347,6 +347,111 @@
                 </RelativeLayout>
 
             </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/currentLoadOutCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/currentShipCardView"
+                android:layout_marginLeft="@dimen/card_spacing"
+                android:layout_marginTop="@dimen/card_spacing"
+                android:layout_marginRight="@dimen/card_spacing"
+                app:cardUseCompatPadding="true">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <com.makeramen.roundedimageview.RoundedImageView
+                        android:id="@+id/currentLoadOutImageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="164dp"
+                        android:scaleType="matrix"
+                        app:riv_corner_radius_top_left="@dimen/card_corner_radius"
+                        app:riv_corner_radius_top_right="@dimen/card_corner_radius" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/currentLoadOutImageView"
+                        android:orientation="vertical"
+                        android:paddingLeft="24dp"
+                        android:paddingTop="24dp"
+                        android:paddingRight="24dp"
+                        android:paddingBottom="24dp">
+
+                        <TextView
+                            android:id="@+id/currentLoadOutTitleTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                        <TextView
+                            android:id="@+id/currentLoadOutSubtitleTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/currentLoadOutTitleTextView"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                        <TextView
+                            android:id="@+id/currentLoadOutHullHealthLabelTextView"
+                            android:layout_width="130dp"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/currentLoadOutSubtitleTextView"
+                            android:text="@string/load_out_hull_health"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/currentLoadOutHullHealthTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/currentLoadOutSubtitleTextView"
+                            android:layout_toEndOf="@id/currentLoadOutHullHealthLabelTextView"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                        <TextView
+                            android:id="@+id/currentLoadOutOxygenRemainingLabelTextView"
+                            android:layout_width="130dp"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/currentLoadOutHullHealthLabelTextView"
+                            android:text="@string/oxygen_remaining"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/currentLoadOutOxygenRemainingTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/currentLoadOutHullHealthLabelTextView"
+                            android:layout_toEndOf="@id/currentLoadOutOxygenRemainingLabelTextView"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+                        <TextView
+                            android:id="@+id/currentLoadOutEnergyLabelTextView"
+                            android:layout_width="130dp"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/currentLoadOutOxygenRemainingLabelTextView"
+                            android:text="@string/load_out_energy"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/currentLoadOutEnergyTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/currentLoadOutOxygenRemainingLabelTextView"
+                            android:layout_toEndOf="@id/currentLoadOutEnergyLabelTextView"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+                    </RelativeLayout>
+
+                </RelativeLayout>
+
+            </com.google.android.material.card.MaterialCardView>
         </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
