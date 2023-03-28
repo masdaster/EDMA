@@ -35,23 +35,20 @@ public class FrontierProfileResponse {
         @SerializedName("explore")
         public int Explore;
 
-        @SerializedName("crime")
-        public int Crime;
-
-        @SerializedName("service")
-        public int Service;
-
         @SerializedName("empire")
         public int Empire;
 
         @SerializedName("federation")
         public int Federation;
 
-        @SerializedName("power")
-        public int Power;
-
         @SerializedName("cqc")
         public int Cqc;
+
+        @SerializedName("soldier")
+        public int Mercenary;
+
+        @SerializedName("exobiologist")
+        public int Exobiologist;
     }
 
     public static class FrontierProfileSystemResponse {

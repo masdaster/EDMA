@@ -64,6 +64,8 @@ class InaraPlayer(val context: Context) : PlayerNetwork {
             lateinit var tradeRank: CommanderRank
             lateinit var explorationRank: CommanderRank
             lateinit var cqcRank: CommanderRank
+            lateinit var mercenaryRank: CommanderRank
+            lateinit var exobiologistRank: CommanderRank
             lateinit var empireRank: CommanderRank
             lateinit var federationRank: CommanderRank
 
@@ -102,6 +104,22 @@ class InaraPlayer(val context: Context) : PlayerNetwork {
                             (rank.RankProgress * 100).toInt()
                         )
                     }
+                    "soldier" -> {
+                        mercenaryRank = CommanderRank(
+                            context.resources
+                                .getStringArray(R.array.ranks_mercenary)[rank.RankValue],
+                            rank.RankValue,
+                            (rank.RankProgress * 100).toInt()
+                        )
+                    }
+                    "exobiologist" -> {
+                        exobiologistRank = CommanderRank(
+                            context.resources
+                                .getStringArray(R.array.ranks_exobiologist)[rank.RankValue],
+                            rank.RankValue,
+                            (rank.RankProgress * 100).toInt()
+                        )
+                    }
                     "empire" -> {
                         empireRank = CommanderRank(
                             context.resources
@@ -128,7 +146,9 @@ class InaraPlayer(val context: Context) : PlayerNetwork {
                     explorationRank,
                     cqcRank,
                     federationRank,
-                    empireRank
+                    empireRank,
+                    mercenaryRank,
+                    exobiologistRank
                 ), error = null
             )
         } catch (t: Throwable) {

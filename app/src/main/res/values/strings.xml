@@ -5,7 +5,7 @@
     <string name="edapi_base">https://ed-api.9cw.eu/</string>
     <string name="edapi_v4_base">https://ed.9cw.eu/</string>
     <string name="edsm_base">https://www.edsm.net/</string>
-    <string name="inara_api_base">https://inara.cz/</string>
+    <string name="inara_base">https://inara.cz/</string>
     <string name="frontier_auth_base">https://auth.frontierstore.net/</string>
     <string name="frontier_api_base">https://companion.orerve.net/</string>
     <string name="commander_help_url">https://edcompanion.corenting.fr/commander</string>
@@ -76,6 +76,8 @@
     <string name="rank_trading">Trade</string>
     <string name="rank_exploration">Exploration</string>
     <string name="rank_arena">Arena</string>
+    <string name="rank_mercenary">Mercenary</string>
+    <string name="rank_exobiologist">Exobiologist</string>
     <string name="player_ranks">Player ranks</string>
     <string name="faction_ranks">Faction ranks</string>
     <string-array name="ranks_combat">
@@ -136,6 +138,38 @@
         <item>Hero</item>
         <item>Legend</item>
         <item>Elite</item>
+    </string-array>
+    <string-array name="ranks_mercenary">
+        <item>Defenceless</item>
+        <item>Mostly</item>
+        <item>Rookie</item>
+        <item>Soldier</item>
+        <item>Gunslinger</item>
+        <item>Warrior</item>
+        <item>Gladiator</item>
+        <item>Deadeye</item>
+        <item>Elite</item>
+        <item>Elite I</item>
+        <item>Elite II</item>
+        <item>Elite III</item>
+        <item>Elite IV</item>
+        <item>Elite V</item>
+    </string-array>
+    <string-array name="ranks_exobiologist">
+        <item>Directionless</item>
+        <item>Mostly Directionless</item>
+        <item>Compiler</item>
+        <item>Collector</item>
+        <item>Cataloguer</item>
+        <item>Taxonomist</item>
+        <item>Ecologist</item>
+        <item>Geneticist</item>
+        <item>Elite</item>
+        <item>Elite I</item>
+        <item>Elite II</item>
+        <item>Elite III</item>
+        <item>Elite IV</item>
+        <item>Elite V</item>
     </string-array>
     <string-array name="ranks_federation">
         <item>None</item>
@@ -293,13 +327,13 @@
     <string name="title_activity_settings">Settings</string>
     <string name="settings_cmdr_summary">Choose which accounts you want to use to fetch your commander informations</string>
     <string name="settings_cmdr_category">Commander</string>
+    <string name="settings_cmdr_name">Commander name</string>
+    <string name="settings_cmdr_name_summary">The ingame name of your CMDR</string>
     <string name="settings_cmdr_frontier_category_title">Frontier account</string>
     <string name="settings_cmdr_inara_category_title">INARA</string>
     <string name="settings_cmdr_edsm_category_title">EDSM</string>
     <string name="settings_news_lang">GalNet and news language</string>
     <string name="settings_news_lang_summary">Change the language used for GalNet and news</string>
-    <string name="settings_cmdr_edsm_username">Commander name</string>
-    <string name="settings_cmdr_edsm_username_summary">The ingame name of your CMDR (not your EDSM username)</string>
     <string name="settings_cmdr_edsm_api_key">EDSM API key</string>
     <string name="settings_cmdr_edsm_api_key_summary">Your personal EDSM API key. You can find it in the "API key" tab of the EDSM.net website settings.</string>
     <string name="settings_cmdr_frontier_oauth">Link your Frontier account</string>

@@ -94,7 +94,7 @@ public class RetrofitSingleton implements Serializable {
         }
 
         inaraRetrofit = getRetrofitInstance()
-                .baseUrl(ctx.getString(R.string.inara_api_base))
+                .baseUrl(ctx.getString(R.string.inara_base))
                 .build()
                 .create(InaraRetrofit.class);
         return inaraRetrofit;

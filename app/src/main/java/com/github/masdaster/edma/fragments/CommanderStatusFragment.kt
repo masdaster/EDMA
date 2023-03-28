@@ -84,6 +84,16 @@ class CommanderStatusFragment : Fragment() {
             binding.arenaRankLayout.root,
             getString(R.string.rank_arena)
         )
+        RankUtils.setTempContent(
+            context,
+            binding.mercenaryRankLayout.root,
+            getString(R.string.rank_mercenary)
+        )
+        RankUtils.setTempContent(
+            context,
+            binding.exobiologistRankLayout.root,
+            getString(R.string.rank_exobiologist)
+        )
 
         // Hide views according to supported informations from source
         val currentContext = context
@@ -258,33 +268,71 @@ class CommanderStatusFragment : Fragment() {
 
             val ranks = result.data
             RankUtils.setContent(
-                context, binding.federationRankLayout.root, R.drawable.elite_federation,
-                ranks.federation, getString(R.string.rank_federation)
+                context,
+                binding.federationRankLayout.root,
+                getInaraRankLogo(13, 0),
+                ranks.federation,
+                getString(R.string.rank_federation)
             )
             RankUtils.setContent(
-                context, binding.empireRankLayout.root, R.drawable.elite_empire,
-                ranks.empire, getString(R.string.rank_empire)
+                context,
+                binding.empireRankLayout.root,
+                getInaraRankLogo(12, 0),
+                ranks.empire,
+                getString(R.string.rank_empire)
             )
             RankUtils.setContent(
-                context, binding.combatRankLayout.root,
-                InternalNamingUtils.getCombatLogoId(ranks.combat.value), ranks.combat,
+                context,
+                binding.combatRankLayout.root,
+                getInaraRankLogo(1, ranks.combat.value),
+                ranks.combat,
                 getString(R.string.rank_combat)
             )
             RankUtils.setContent(
-                context, binding.tradeRankLayout.root,
-                InternalNamingUtils.getTradeLogoId(ranks.trade.value), ranks.trade,
+                context,
+                binding.tradeRankLayout.root,
+                getInaraRankLogo(2, ranks.trade.value),
+                ranks.trade,
                 getString(R.string.rank_trading)
             )
             RankUtils.setContent(
-                context, binding.explorationRankLayout.root,
-                InternalNamingUtils.getExplorationLogoId(ranks.explore.value),
-                ranks.explore, getString(R.string.rank_exploration)
+                context,
+                binding.explorationRankLayout.root,
+                getInaraRankLogo(3, ranks.explore.value),
+                ranks.explore,
+                getString(R.string.rank_exploration)
             )
             RankUtils.setContent(
-                context, binding.arenaRankLayout.root,
-                InternalNamingUtils.getCqcLogoId(ranks.cqc.value), ranks.cqc,
+                context,
+                binding.arenaRankLayout.root,
+                getInaraRankLogo(4, ranks.cqc.value),
+                ranks.cqc,
                 getString(R.string.rank_arena)
             )
+            if(ranks.mercenary == null) {
+                binding.mercenaryRankLayout.root.visibility = View.GONE
+            } else{
+                binding.mercenaryRankLayout.root.visibility = View.VISIBLE
+                RankUtils.setContent(
+                    context,
+                    binding.mercenaryRankLayout.root,
+                    getInaraRankLogo(5, ranks.mercenary.value),
+                    ranks.mercenary,
+                    getString(R.string.rank_mercenary)
+                )
+            }
+            if(ranks.exobiologist == null) {
+                binding.exobiologistRankLayout.root.visibility = View.GONE
+            } else{
+                binding.exobiologistRankLayout.root.visibility = View.VISIBLE
+                RankUtils.setContent(
+                    context,
+                    binding.exobiologistRankLayout.root,
+                    getInaraRankLogo(6, ranks.exobiologist.value),
+                    ranks.exobiologist,
+                    getString(R.string.rank_exobiologist)
+                )
+            }
         }
     }
 
@@ -299,4 +347,6 @@ class CommanderStatusFragment : Fragment() {
             binding.swipeContainer.isRefreshing = true
         }
     }
+
+    private fun getInaraRankLogo(type: Int, value: Int): String = context?.getString(R.string.inara_base)+"/images/ranks/$type/$value.png?v=2"
 }

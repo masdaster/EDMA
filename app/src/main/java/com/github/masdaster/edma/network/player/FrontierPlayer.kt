@@ -81,6 +81,20 @@ class FrontierPlayer(val context: Context) : PlayerNetwork {
             apiRanks.Cqc, -1
         )
 
+        // Mercenary
+        val mercenary = CommanderRank(
+            context.resources
+                .getStringArray(R.array.ranks_mercenary)[apiRanks.Mercenary],
+            apiRanks.Mercenary, -1
+        )
+
+        // Exobiologist
+        val exobiologist = CommanderRank(
+            context.resources
+                .getStringArray(R.array.ranks_exobiologist)[apiRanks.Exobiologist],
+            apiRanks.Exobiologist, -1
+        )
+
         // Federation
         val federationRank = CommanderRank(
             context.resources
@@ -97,7 +111,8 @@ class FrontierPlayer(val context: Context) : PlayerNetwork {
 
         return CommanderRanks(
             combatRank, tradeRank, exploreRank,
-            cqcRank, federationRank, empireRank
+            cqcRank, mercenary, exobiologist,
+            federationRank, empireRank
         )
     }
 

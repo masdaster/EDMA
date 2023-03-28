@@ -6,6 +6,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import com.github.masdaster.edma.R;
 import com.github.masdaster.edma.animation.ProgressBarAnimation;
 import com.github.masdaster.edma.models.CommanderRank;
@@ -22,13 +24,13 @@ public class RankUtils {
         progressBar.setProgress(0);
     }
 
-    public static void setContent(Context ctx, View rootView, int logoId, CommanderRank rank, String description) {
+    public static void setContent(Context ctx, View rootView, String logoUrl, CommanderRank rank, String description) {
         ImageView logoView = rootView.findViewById(R.id.itemImageView);
         TextView titleView = rootView.findViewById(R.id.titleTextView);
         TextView progressView = rootView.findViewById(R.id.progressTextView);
         ProgressBar progressBar = rootView.findViewById(R.id.progressBar);
 
-        logoView.setImageResource(logoId);
+        Glide.with(logoView).load(logoUrl).error(R.drawable.rank_placeholder).centerCrop().into(logoView);
         titleView.setText(String.format("%s : %s", description, rank.getName()));
 
         // If rank progress is -1 it means it's not supported by the network used so hide it

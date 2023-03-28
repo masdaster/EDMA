@@ -6,5 +6,7 @@ data class CommanderRanks constructor(
     val explore: CommanderRank,
     val cqc: CommanderRank,
     val federation: CommanderRank,
-    val empire: CommanderRank
+    val empire: CommanderRank,
+    val mercenary: CommanderRank? = null,
+    val exobiologist: CommanderRank? = null
 )
