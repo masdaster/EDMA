@@ -16,10 +16,11 @@ import java.text.NumberFormat;
 
 import com.github.masdaster.edma.R;
 import com.github.masdaster.edma.databinding.ListItemFleetShipBinding;
-import com.github.masdaster.edma.models.Ship;
+import com.github.masdaster.edma.models.ShipInformation;
 import com.github.masdaster.edma.utils.MathUtils;
+import com.github.masdaster.edma.utils.MiscUtils;
 
-public class CommanderFleetAdapter extends ListAdapter<Ship,
+public class CommanderFleetAdapter extends ListAdapter<ShipInformation,
         CommanderFleetAdapter.shipViewHolder> {
 
     private final NumberFormat numberFormat;
@@ -30,14 +31,14 @@ public class CommanderFleetAdapter extends ListAdapter<Ship,
         // Parent class setup
         super(new DiffUtil.ItemCallback<>() {
             @Override
-            public boolean areItemsTheSame(@NonNull Ship oldItem,
-                                           @NonNull Ship newItem) {
+            public boolean areItemsTheSame(@NonNull ShipInformation oldItem,
+                                           @NonNull ShipInformation newItem) {
                 return areContentsTheSame(oldItem, newItem);
             }
 
             @Override
-            public boolean areContentsTheSame(@NonNull Ship oldItem,
-                                              @NonNull Ship newItem) {
+            public boolean areContentsTheSame(@NonNull ShipInformation oldItem,
+                                              @NonNull ShipInformation newItem) {
                 return oldItem.getId() == newItem.getId();
             }
         });
@@ -56,36 +57,36 @@ public class CommanderFleetAdapter extends ListAdapter<Ship,
 
     @Override
     public void onBindViewHolder(@NonNull final shipViewHolder holder, final int position) {
-        Ship currentShip = getItem(holder.getAdapterPosition());
+        ShipInformation currentShipInformation = getItem(holder.getAdapterPosition());
 
         // Name / model ...
-        holder.viewBinding.titleTextView.setText(currentShip.getModel());
-        if (currentShip.getName() != null && !currentShip.getName().equals(currentShip.getModel())) {
+        holder.viewBinding.titleTextView.setText(currentShipInformation.getModel());
+        if (currentShipInformation.getName() != null && !currentShipInformation.getName().equals(currentShipInformation.getModel())) {
             holder.viewBinding.subtitleTextView.setVisibility(View.VISIBLE);
-            holder.viewBinding.subtitleTextView.setText(currentShip.getName());
+            holder.viewBinding.subtitleTextView.setText(currentShipInformation.getName());
         } else {
             holder.viewBinding.subtitleTextView.setVisibility(View.GONE);
         }
 
         // Current ship
-        holder.viewBinding.currentShipLabelTextView.setVisibility(currentShip.isCurrentShip() ?
+        holder.viewBinding.currentShipLabelTextView.setVisibility(currentShipInformation.isCurrentShip() ?
                 View.VISIBLE : View.GONE);
 
         // System and station
-        holder.viewBinding.systemTextView.setText(currentShip.getSystemName());
-        holder.viewBinding.stationTextView.setText(currentShip.getStationName());
+        holder.viewBinding.systemTextView.setText(currentShipInformation.getSystemName());
+        holder.viewBinding.stationTextView.setText(currentShipInformation.getStationName());
 
         // Ship value
-        String shipValue = numberFormat.format(currentShip.getHullValue() +
-                currentShip.getModulesValue());
+        String shipValue = numberFormat.format(currentShipInformation.getHullValue() +
+                currentShipInformation.getModulesValue());
         holder.viewBinding.shipValueTextView.setText(context.getString(R.string.credits, shipValue));
 
         // Cargo value
-        if (currentShip.getCargoValue() != 0) {
+        if (currentShipInformation.getCargoValue() != 0) {
             holder.viewBinding.cargoValueTextView.setVisibility(View.VISIBLE);
             holder.viewBinding.cargoValueLabelTextView.setVisibility(View.VISIBLE);
 
-            String cargoValue = numberFormat.format(currentShip.getCargoValue());
+            String cargoValue = numberFormat.format(currentShipInformation.getCargoValue());
             holder.viewBinding.cargoValueTextView.setText(context.getString(R.string.credits, cargoValue));
         } else {
             holder.viewBinding.cargoValueTextView.setVisibility(View.GONE);
@@ -93,12 +94,7 @@ public class CommanderFleetAdapter extends ListAdapter<Ship,
         }
 
         // Ship picture
-        String shipUrl = String.format("https://ed.9cw.eu/ships/%s/picture", currentShip.getInternalModel());
-        Glide.with(holder.viewBinding.shipImageView)
-                .load(shipUrl)
-                .error(R.drawable.ship_placeholder)
-                .centerCrop()
-                .into(holder.viewBinding.shipImageView);
+        MiscUtils.loadShipImage(holder.viewBinding.shipImageView, currentShipInformation);
     }
 
     public static class shipViewHolder extends RecyclerView.ViewHolder {

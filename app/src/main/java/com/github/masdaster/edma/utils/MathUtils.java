@@ -20,4 +20,8 @@ public class MathUtils {
             return result;
         }
     }
+
+    public static int divAndRound(int x, int y){
+        return (int)Math.round((double)x/y);
+    }
 }

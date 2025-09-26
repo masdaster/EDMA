@@ -9,175 +9,237 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardView"
-
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/card_spacing"
-            android:layout_marginTop="@dimen/card_spacing"
-            android:layout_marginRight="@dimen/card_spacing"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            app:cardUseCompatPadding="true">
-
-            <RelativeLayout
-                android:id="@+id/itemLayout"
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/stateCardView"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:paddingLeft="24dp"
-                android:paddingTop="24dp"
-                android:paddingRight="24dp"
-                android:paddingBottom="24dp">
-
-                <TextView
-                    android:id="@+id/commanderNameTextView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:maxLines="2"
-                    android:text="@string/commander"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/card_spacing"
+                android:layout_marginTop="@dimen/card_spacing"
+                android:layout_marginRight="@dimen/card_spacing"
+                app:cardUseCompatPadding="true">
 
                 <RelativeLayout
-                    android:id="@+id/creditsContainer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/commanderNameTextView"
-                    android:layout_marginTop="8dp">
-
-                    <ImageView
-                        android:id="@+id/creditsImageView"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="7dp"
-                        app:srcCompat="@drawable/ic_attach_money_gray600_24dp"
-                        app:tint="#757575" />
+                    android:id="@+id/itemLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:paddingLeft="24dp"
+                    android:paddingTop="24dp"
+                    android:paddingRight="24dp"
+                    android:paddingBottom="24dp">
 
                     <TextView
-                        android:id="@+id/creditsTextView"
+                        android:id="@+id/commanderNameTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:layout_toEndOf="@+id/creditsImageView"
-                        android:gravity="center_vertical"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:text="@string/commander"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                    <RelativeLayout
+                        android:id="@+id/creditsContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/commanderNameTextView"
+                        android:layout_marginTop="8dp">
+
+                        <ImageView
+                            android:id="@+id/creditsImageView"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="7dp"
+                            app:srcCompat="@drawable/ic_attach_money_gray600_24dp"
+                            app:tint="#757575" />
+
+                        <TextView
+                            android:id="@+id/creditsTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:layout_toEndOf="@+id/creditsImageView"
+                            android:gravity="center_vertical"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/locationContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/creditsContainer"
+                        android:layout_marginTop="8dp">
+
+                        <ImageView
+                            android:id="@+id/locationImageView"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_alignParentStart="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="7dp"
+                            app:srcCompat="@drawable/elite_map_marker"
+                            app:tint="#757575" />
+
+                        <TextView
+                            android:id="@+id/locationTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:layout_toEndOf="@+id/locationImageView"
+                            android:gravity="center_vertical"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                    </RelativeLayout>
+
+                    <include
+                        android:id="@+id/currentLoadoutLayout"
+                        layout="@layout/include_loadout_details"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/locationContainer"
+                        android:layout_marginTop="8dp" />
+
+                    <TextView
+                        android:id="@+id/factionsRanks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/currentLoadoutLayout"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/faction_ranks"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+                    <include
+                        android:id="@+id/federationRankLayout"
+                        layout="@layout/include_rank"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/factionsRanks"
+                        android:layout_marginTop="8dp" />
+
+                    <include
+                        android:id="@+id/empireRankLayout"
+                        layout="@layout/include_rank"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/federationRankLayout" />
+
+                    <TextView
+                        android:id="@+id/playersRank"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/empireRankLayout"
+                        android:layout_marginTop="8dp"
+                        android:text="@string/player_ranks"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+                    <include
+                        android:id="@+id/combatRankLayout"
+                        layout="@layout/include_rank"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/playersRank"
+                        android:layout_marginTop="8dp" />
+
+                    <include
+                        android:id="@+id/tradeRankLayout"
+                        layout="@layout/include_rank"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/combatRankLayout" />
+
+                    <include
+                        android:id="@+id/explorationRankLayout"
+                        layout="@layout/include_rank"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tradeRankLayout" />
+
+                    <include
+                        android:id="@+id/arenaRankLayout"
+                        layout="@layout/include_rank"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/explorationRankLayout" />
+
+                    <include
+                        android:id="@+id/mercenaryRankLayout"
+                        layout="@layout/include_rank"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/arenaRankLayout" />
+
+                    <include
+                        android:id="@+id/exobiologistRankLayout"
+                        layout="@layout/include_rank"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/mercenaryRankLayout" />
                 </RelativeLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/currentShipCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/stateCardView"
+                android:layout_marginLeft="@dimen/card_spacing"
+                android:layout_marginTop="@dimen/card_spacing"
+                android:layout_marginRight="@dimen/card_spacing"
+                app:cardUseCompatPadding="true">
 
                 <RelativeLayout
-                    android:id="@+id/locationContainer"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/creditsContainer"
-                    android:layout_marginTop="8dp">
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                    <ImageView
-                        android:id="@+id/locationImageView"
-                        android:layout_width="18dp"
-                        android:layout_height="18dp"
-                        android:layout_alignParentStart="true"
-                        android:layout_centerVertical="true"
-                        android:layout_marginStart="7dp"
-                        app:srcCompat="@drawable/elite_map_marker"
-                        app:tint="#757575" />
+                    <com.makeramen.roundedimageview.RoundedImageView
+                        android:id="@+id/currentShipImageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="164dp"
+                        app:riv_corner_radius_top_left="@dimen/card_corner_radius"
+                        app:riv_corner_radius_top_right="@dimen/card_corner_radius" />
 
-                    <TextView
-                        android:id="@+id/locationTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="15dp"
-                        android:layout_toEndOf="@+id/locationImageView"
-                        android:gravity="center_vertical"
-                        android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/currentShipImageView"
+                        android:orientation="vertical"
+                        android:paddingLeft="24dp"
+                        android:paddingTop="24dp"
+                        android:paddingRight="24dp"
+                        android:paddingBottom="24dp">
+
+                        <TextView
+                            android:id="@+id/currentShipTitleTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:ellipsize="end"
+                            android:maxLines="2"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Title" />
+
+                        <TextView
+                            android:id="@+id/currentShipSubtitleTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/currentShipTitleTextView"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+                        <include
+                            android:id="@+id/currentShipStateLayout"
+                            layout="@layout/include_ship_state"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/currentShipSubtitleTextView"
+                            android:layout_marginTop="8dp" />
+                    </RelativeLayout>
                 </RelativeLayout>
-
-                <include
-                    android:id="@+id/currentLoadoutLayout"
-                    layout="@layout/include_loadout_details"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/locationContainer"
-                    android:layout_marginTop="8dp" />
-
-                <TextView
-                    android:id="@+id/factionsRanks"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/currentLoadoutLayout"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/faction_ranks"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
-
-                <include
-                    android:id="@+id/federationRankLayout"
-                    layout="@layout/include_rank"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/factionsRanks"
-                    android:layout_marginTop="8dp" />
-
-                <include
-                    android:id="@+id/empireRankLayout"
-                    layout="@layout/include_rank"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/federationRankLayout" />
-
-                <TextView
-                    android:id="@+id/playersRank"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/empireRankLayout"
-                    android:layout_marginTop="8dp"
-                    android:text="@string/player_ranks"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
-
-                <include
-                    android:id="@+id/combatRankLayout"
-                    layout="@layout/include_rank"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/playersRank"
-                    android:layout_marginTop="8dp" />
-
-                <include
-                    android:id="@+id/tradeRankLayout"
-                    layout="@layout/include_rank"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/combatRankLayout" />
-
-                <include
-                    android:id="@+id/explorationRankLayout"
-                    layout="@layout/include_rank"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tradeRankLayout" />
-
-                <include
-                    android:id="@+id/arenaRankLayout"
-                    layout="@layout/include_rank"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/explorationRankLayout" />
-
-                <include
-                    android:id="@+id/mercenaryRankLayout"
-                    layout="@layout/include_rank"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/arenaRankLayout" />
-
-                <include
-                    android:id="@+id/exobiologistRankLayout"
-                    layout="@layout/include_rank"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/mercenaryRankLayout" />
-            </RelativeLayout>
-
-        </com.google.android.material.card.MaterialCardView>
+            </com.google.android.material.card.MaterialCardView>
+        </RelativeLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

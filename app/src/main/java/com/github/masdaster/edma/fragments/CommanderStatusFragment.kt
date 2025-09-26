@@ -2,7 +2,9 @@ package com.github.masdaster.edma.fragments
 
 import android.content.DialogInterface
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Base64
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,7 +12,6 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.github.masdaster.edma.R
 import com.github.masdaster.edma.activities.LoginActivity
 import com.github.masdaster.edma.activities.SettingsActivity
@@ -22,6 +23,7 @@ import com.github.masdaster.edma.models.CommanderLoadoutWeapon
 import com.github.masdaster.edma.models.CommanderPosition
 import com.github.masdaster.edma.models.CommanderRanks
 import com.github.masdaster.edma.models.ProxyResult
+import com.github.masdaster.edma.models.Ship
 import com.github.masdaster.edma.models.exceptions.DataNotInitializedException
 import com.github.masdaster.edma.models.exceptions.FrontierAuthNeededException
 import com.github.masdaster.edma.utils.CommanderUtils
@@ -32,6 +34,9 @@ import com.github.masdaster.edma.utils.NotificationsUtils
 import com.github.masdaster.edma.utils.RankUtils
 import com.github.masdaster.edma.utils.SettingsUtils
 import com.github.masdaster.edma.view_models.CommanderViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import java.io.ByteArrayOutputStream
+import java.util.zip.GZIPOutputStream
 
 class CommanderStatusFragment : Fragment() {
 
@@ -124,6 +129,10 @@ class CommanderStatusFragment : Fragment() {
             } else {
                 binding.locationContainer.visibility = View.VISIBLE
             }
+
+            if (!CommanderUtils.hasCurrentShipData(currentContext)) {
+                binding.currentShipCardView.visibility = View.GONE
+            }
         }
 
         // Setup observers
@@ -135,6 +144,9 @@ class CommanderStatusFragment : Fragment() {
         }
         viewModel.getPosition().observe(viewLifecycleOwner) {
             onPositionChange(it)
+        }
+        viewModel.getCurrentShip().observe(viewLifecycleOwner) {
+            onCurrentShipChange(it)
         }
         viewModel.getFleet().observe(viewLifecycleOwner) {
             onFleetChange(it)
@@ -227,6 +239,7 @@ class CommanderStatusFragment : Fragment() {
         viewModel.fetchCredits()
         viewModel.fetchPosition()
         viewModel.fetchRanks()
+        viewModel.fetchCurrentShip()
         viewModel.fetchCurrentLoadout()
 
         // We do not really need fleet/loadouts except to preload for other tab and to display auth popup if needed
@@ -406,6 +419,56 @@ class CommanderStatusFragment : Fragment() {
                     R.drawable.rank_placeholder, ranks.mercenary,
                     getString(R.string.rank_mercenary)
                 )
+            }
+        }
+    }
+
+    private fun onCurrentShipChange(result: ProxyResult<Ship>) {
+        // Don't display if not enabled
+        if (!SettingsUtils.getBoolean(
+                context,
+                getString(R.string.settings_ship_state_display_enable),
+                true
+            )
+        ) {
+            binding.currentShipStateLayout.shipStateContainer.visibility = View.GONE
+            return
+        }
+
+        handleResult(result) {
+            if (result.data == null) {
+                return@handleResult
+            }
+
+            val shipInformation = result.data.information
+            val shipState = result.data.state
+
+            MiscUtils.loadShipImage(binding.currentShipImageView, shipInformation)
+            binding.currentShipTitleTextView.text = shipInformation.model
+            if (shipInformation.name != null && shipInformation.name != shipInformation.model) {
+                binding.currentShipSubtitleTextView.visibility = View.VISIBLE
+                binding.currentShipSubtitleTextView.text = shipInformation.name
+            } else {
+                binding.currentShipSubtitleTextView.visibility = View.GONE
+            }
+            binding.currentShipStateLayout.shipCockpitBreachedTextView.text = if(shipState.cockpitBreached) "yes" else "no"
+            binding.currentShipStateLayout.shipShieldUpTextView.text = if(shipState.shieldUp) "yes" else "no"
+            binding.currentShipStateLayout.shipHullHealthTextView.text = "${MathUtils.divAndRound(shipState.hullHealth,10000)}%"
+            binding.currentShipStateLayout.shipIntegrityHealthTextView.text = "${MathUtils.divAndRound(1000000-shipState.integrityHealth,10000)}%"
+            binding.currentShipStateLayout.shipPaintworkHealthTextView.text = "${MathUtils.divAndRound(1000000-shipState.paintworkHealth,10000)}%"
+            binding.currentShipStateLayout.shipShieldHealthTextView.text = "${MathUtils.divAndRound(shipState.shieldHealth, 10000)}%"
+            binding.currentShipStateLayout.shipOxygenRemainingTextView.text = "${MathUtils.divAndRound(shipState.oxygenRemaining, 1000)}s"
+            binding.currentShipCardView.setOnClickListener {
+                ByteArrayOutputStream().use { out ->
+                    GZIPOutputStream(out).use {
+                        it.write(result.data.raw.toString().encodeToByteArray())
+                    }
+                    val encodedShip = Base64.encode(out.toByteArray(), Base64.URL_SAFE + Base64.NO_PADDING + Base64.NO_WRAP).decodeToString().replace("=", "%3D")
+                    startActivity(Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://edsy.org/#/I=$encodedShip")
+                    ))
+                }
             }
         }
     }

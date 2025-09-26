@@ -64,6 +64,14 @@
     <string name="current_ship">Current ship</string>
     <string name="ship_value">Ship value</string>
     <string name="cargo_value">Cargo value</string>
+    <string name="ship_state">Ship state</string>
+    <string name="ship_hull_health">Hull health</string>
+    <string name="ship_integrity_health">Integrity health</string>
+    <string name="ship_paintwork_health">Paintwork health</string>
+    <string name="ship_shield_health">Shield health</string>
+    <string name="ship_cockpit_breached">Cockpit breached</string>
+    <string name="ship_oxygen_remaining">Oxygen remaining</string>
+    <string name="ship_shield_up">Shield up</string>
     <string name="suit">Suit</string>
     <string name="first_primary_weapon">Primary weapon #1</string>
     <string name="second_primary_weapon">Primary weapon #2</string>
@@ -346,6 +354,8 @@
     <string name="settings_cmdr_edsm_category_title">EDSM</string>
     <string name="settings_news_lang">GalNet and news language</string>
     <string name="settings_news_lang_summary">Change the language used for GalNet and news</string>
+    <string name="settings_ship_state_display_enable">Display Ship State</string>
+    <string name="settings_ship_state_display_enable_summary">Display ship details (current state and health)</string>
     <string name="settings_cmdr_loadout_display_enable">Display CMDR loadout</string>
     <string name="settings_cmdr_loadout_display_enable_summary">Display loadouts details (current loadout and the list of your loadouts)</string>
     <string name="settings_cmdr_edsm_api_key">EDSM API key</string>

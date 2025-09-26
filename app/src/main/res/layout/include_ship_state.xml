@@ -1,0 +1,136 @@
+<RelativeLayout android:id="@+id/shipStateContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:visibility="visible"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <TextView
+        android:id="@+id/shipStateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="@string/ship_state"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
+
+    <TextView
+        android:id="@+id/shipCockpitBreachedLabelTextView"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/shipStateTextView"
+        android:text="@string/ship_cockpit_breached"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/shipCockpitBreachedTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/shipStateTextView"
+        android:layout_toEndOf="@id/shipCockpitBreachedLabelTextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+    <TextView
+        android:id="@+id/shipShieldUpLabelTextView"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/shipCockpitBreachedLabelTextView"
+        android:text="@string/ship_shield_up"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/shipShieldUpTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/shipCockpitBreachedLabelTextView"
+        android:layout_toEndOf="@id/shipShieldUpLabelTextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+    <TextView
+        android:id="@+id/shipHullHealthLabelTextView"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/shipShieldUpLabelTextView"
+        android:text="@string/ship_hull_health"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/shipHullHealthTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/shipShieldUpLabelTextView"
+        android:layout_toEndOf="@id/shipHullHealthLabelTextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+    <TextView
+        android:id="@+id/shipIntegrityHealthLabelTextView"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/shipHullHealthLabelTextView"
+        android:text="@string/ship_integrity_health"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/shipIntegrityHealthTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/shipHullHealthLabelTextView"
+        android:layout_toEndOf="@id/shipIntegrityHealthLabelTextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+    <TextView
+        android:id="@+id/shipPaintworkHealthLabelTextView"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/shipIntegrityHealthLabelTextView"
+        android:text="@string/ship_paintwork_health"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/shipPaintworkHealthTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/shipIntegrityHealthLabelTextView"
+        android:layout_toEndOf="@id/shipPaintworkHealthLabelTextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+    <TextView
+        android:id="@+id/shipShieldHealthLabelTextView"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/shipPaintworkHealthLabelTextView"
+        android:text="@string/ship_shield_health"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/shipShieldHealthTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/shipPaintworkHealthLabelTextView"
+        android:layout_toEndOf="@id/shipShieldHealthLabelTextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+    <TextView
+        android:id="@+id/shipOxygenRemainingLabelTextView"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/shipShieldHealthLabelTextView"
+        android:text="@string/ship_oxygen_remaining"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/shipOxygenRemainingTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/shipShieldHealthLabelTextView"
+        android:layout_toEndOf="@id/shipOxygenRemainingLabelTextView"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
+</RelativeLayout>

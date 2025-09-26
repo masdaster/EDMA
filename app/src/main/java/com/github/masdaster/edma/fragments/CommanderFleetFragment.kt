@@ -26,7 +26,7 @@ class CommanderFleetFragment : AbstractListFragment<CommanderFleetAdapter>() {
                     NotificationsUtils.displayGenericDownloadErrorSnackbar(activity)
                 }
             } else {
-                recyclerViewAdapter.submitList(result.data.ships)
+                recyclerViewAdapter.submitList(result.data.shipInformations)
             }
 
         }

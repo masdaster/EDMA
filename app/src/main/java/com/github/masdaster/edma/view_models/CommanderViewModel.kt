@@ -12,6 +12,7 @@ import com.github.masdaster.edma.models.CommanderLoadouts
 import com.github.masdaster.edma.models.CommanderPosition
 import com.github.masdaster.edma.models.CommanderRanks
 import com.github.masdaster.edma.models.ProxyResult
+import com.github.masdaster.edma.models.Ship
 import com.github.masdaster.edma.models.exceptions.DataNotInitializedException
 import com.github.masdaster.edma.network.player.EDSMPlayer
 import com.github.masdaster.edma.network.player.FrontierPlayer
@@ -28,6 +29,7 @@ class CommanderViewModel(application: Application) : AndroidViewModel(applicatio
     private val position = MutableLiveData<ProxyResult<CommanderPosition>>()
     private val ranks = MutableLiveData<ProxyResult<CommanderRanks>>()
     private val fleet = MutableLiveData<ProxyResult<CommanderFleet>>()
+    private val currentShip = MutableLiveData<ProxyResult<Ship>>()
     private val currentLoadout = MutableLiveData<ProxyResult<CommanderLoadout>>()
     private val allLoadouts = MutableLiveData<ProxyResult<CommanderLoadouts>>()
 
@@ -38,6 +40,7 @@ class CommanderViewModel(application: Application) : AndroidViewModel(applicatio
             position.postValue(ProxyResult(null, DataNotInitializedException()))
             ranks.postValue(ProxyResult(null, DataNotInitializedException()))
             fleet.postValue(ProxyResult(null, DataNotInitializedException()))
+            currentShip.postValue(ProxyResult(null, DataNotInitializedException()))
             currentLoadout.postValue(ProxyResult(null, DataNotInitializedException()))
         }
     }
@@ -131,6 +134,18 @@ class CommanderViewModel(application: Application) : AndroidViewModel(applicatio
         return fleet
     }
 
+    fun fetchCurrentShip() {
+        if (frontierPlayer.isUsable()) {
+            viewModelScope.launch {
+                currentShip.postValue(frontierPlayer.getCurrentShip())
+            }
+        }
+    }
+
+    fun getCurrentShip(): LiveData<ProxyResult<Ship>> {
+        return currentShip
+    }
+
     fun fetchCurrentLoadout() {
         if (frontierPlayer.isUsable()) {
             viewModelScope.launch {
@@ -154,6 +169,4 @@ class CommanderViewModel(application: Application) : AndroidViewModel(applicatio
     fun getAllLoadouts(): LiveData<ProxyResult<CommanderLoadouts>> {
         return allLoadouts
     }
-
-
 }

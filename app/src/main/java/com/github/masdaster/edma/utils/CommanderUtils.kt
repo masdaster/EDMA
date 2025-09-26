@@ -61,6 +61,8 @@ object CommanderUtils {
         return false
     }
 
+    fun hasCurrentShipData(context: Context): Boolean = FrontierPlayer(context).isUsable()
+
     fun hasCurrentLoadoutData(context: Context): Boolean = FrontierPlayer(context).isUsable()
 
     fun hasCommanderStatus(context: Context): Boolean {
