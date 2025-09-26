@@ -73,6 +73,7 @@
     <string name="ship_oxygen_remaining">Oxygen remaining</string>
     <string name="ship_shield_up">Shield up</string>
     <string name="suit">Suit</string>
+    <string name="grade">Grade</string>
     <string name="first_primary_weapon">Primary weapon #1</string>
     <string name="second_primary_weapon">Primary weapon #2</string>
     <string name="secondary_weapon">Secondary weapon</string>

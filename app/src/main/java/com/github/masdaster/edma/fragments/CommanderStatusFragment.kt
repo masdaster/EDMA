@@ -316,6 +316,7 @@ class CommanderStatusFragment : Fragment() {
             if (result.data.hasLoadout) {
                 binding.currentLoadoutLayout.loadoutContainer.visibility = View.VISIBLE
                 binding.currentLoadoutLayout.suitTextView.text = result.data.suitName
+                binding.currentLoadoutLayout.suitGradeRatingBar.progress = result.data.suitGrade
 
                 // Weapons
                 setLoadoutWeaponDisplay(

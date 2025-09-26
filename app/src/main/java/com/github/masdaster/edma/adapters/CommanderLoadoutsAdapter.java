@@ -1,11 +1,13 @@
 package com.github.masdaster.edma.adapters;
 
 import android.content.Context;
+import android.graphics.Matrix;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
@@ -78,6 +80,15 @@ public class CommanderLoadoutsAdapter extends ListAdapter<CommanderLoadout,
     public void onBindViewHolder(@NonNull final loadoutViewHolder holder, final int position) {
         CommanderLoadout currentLoadout = getItem(holder.getAdapterPosition());
 
+        // Suit picture
+        holder.viewBinding.suitImageView.setImageResource(getSuitPicture(currentLoadout.getSuitType()));
+        final Matrix matrix = holder.viewBinding.suitImageView.getImageMatrix();
+        final float imageWidth = holder.viewBinding.suitImageView.getDrawable().getIntrinsicWidth();
+        final int screenWidth = context.getResources().getDisplayMetrics().widthPixels;
+        final float scaleRatio = screenWidth / imageWidth;
+        matrix.postScale(scaleRatio, scaleRatio);
+        holder.viewBinding.suitImageView.setImageMatrix(matrix);
+
         // Name
         if (currentLoadout.getLoadoutName() != null) {
             holder.viewBinding.currentLoadoutLayout.loadoutTextView.setText(currentLoadout.getLoadoutName());
@@ -85,6 +96,7 @@ public class CommanderLoadoutsAdapter extends ListAdapter<CommanderLoadout,
             holder.viewBinding.currentLoadoutLayout.loadoutTextView.setText(context.getString(R.string.loadout_with_number, currentLoadout.getLoadoutId()));
         }
 
+        holder.viewBinding.currentLoadoutLayout.suitGradeRatingBar.setProgress(currentLoadout.getSuitGrade());
         holder.viewBinding.currentLoadoutLayout.suitTextView.setText(currentLoadout.getSuitName());
 
         // Weapons
@@ -103,6 +115,20 @@ public class CommanderLoadoutsAdapter extends ListAdapter<CommanderLoadout,
                 holder.viewBinding.currentLoadoutLayout.secondaryWeaponLabelTextView,
                 holder.viewBinding.currentLoadoutLayout.secondarWeaponTextView
         );
+    }
+
+    @DrawableRes
+    private int getSuitPicture(String suitType){
+        switch(suitType){
+            default:
+                return R.drawable.remlok_flight_suit;
+            case "UtilitySuit":
+                return R.drawable.maverick_utility_suit;
+            case "TacticalSuit":
+                return R.drawable.dominator_tactical_suit;
+            case "ExplorationSuit":
+                return R.drawable.artemis_explorer_suit;
+        }
     }
 
     public static class loadoutViewHolder extends RecyclerView.ViewHolder {

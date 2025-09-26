@@ -16,7 +16,7 @@
 
     <TextView
         android:id="@+id/suitLabelTextView"
-        android:layout_width="124dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/loadoutTextView"
         android:layout_marginTop="8dp"
@@ -33,12 +33,32 @@
         android:text="@string/unknown"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 
+    <TextView
+        android:id="@+id/suitGradeLabelTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/suitTextView"
+        android:layout_marginTop="8dp"
+        android:text="@string/grade"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textStyle="bold" />
+
+    <RatingBar
+        android:id="@+id/suitGradeRatingBar"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/suitGradeLabelTextView"
+        android:layout_marginTop="8dp"
+        android:max="5"
+        android:numStars="5"
+        android:stepSize="1" />
 
     <TextView
         android:id="@+id/firstPrimaryWeaponLabelTextView"
-        android:layout_width="124dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/suitTextView"
+        android:layout_below="@+id/suitGradeRatingBar"
         android:layout_marginTop="8dp"
         android:text="@string/first_primary_weapon"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
@@ -55,7 +75,7 @@
 
     <TextView
         android:id="@+id/secondaryPrimaryWeaponLabelTextView"
-        android:layout_width="124dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/firstPrimaryWeaponTextView"
         android:layout_marginTop="8dp"
@@ -74,7 +94,7 @@
 
     <TextView
         android:id="@+id/secondaryWeaponLabelTextView"
-        android:layout_width="124dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/secondaryPrimaryWeaponTextView"
         android:layout_marginTop="8dp"

@@ -194,11 +194,17 @@ class FrontierPlayer(val context: Context) : PlayerNetwork {
                 loadoutName = loadoutElement.asJsonObject.get("name").asString
             }
 
+            val suitElement = loadoutElement.asJsonObject.get("suit");
+            val suitName = suitElement.asJsonObject["name"].asString
+            val suitClassName = suitName.substringAfter('_', "")
+
             return CommanderLoadout(
                 true,
                 loadoutElement.asJsonObject.get("loadoutSlotId").asInt,
                 loadoutName,
-                loadoutElement.asJsonObject.get("suit").asJsonObject.get("locName").asString,
+                suitElement.asJsonObject.get("locName").asString,
+                suitName.substringBefore('_'),
+                if(suitClassName.isEmpty()) -1 else suitClassName.last().digitToInt(),
                 getWeaponFromLoadoutResponse(slotsObject, "PrimaryWeapon1"),
                 getWeaponFromLoadoutResponse(slotsObject, "PrimaryWeapon2"),
                 getWeaponFromLoadoutResponse(slotsObject, "SecondaryWeapon")
@@ -206,7 +212,7 @@ class FrontierPlayer(val context: Context) : PlayerNetwork {
 
         } catch (t: Throwable) {
             return CommanderLoadout(
-                false, -1, null, context.getString(R.string.unknown), null, null, null
+                false, -1, null, context.getString(R.string.unknown), context.getString(R.string.unknown), -1, null, null, null
             )
         }
     }
@@ -220,11 +226,17 @@ class FrontierPlayer(val context: Context) : PlayerNetwork {
                 loadoutName = loadoutElement.asJsonObject.get("name").asString
             }
 
+            val suitElement = loadoutElement.asJsonObject.get("suit");
+            val suitName = suitElement.asJsonObject["name"].asString
+            val suitClassName = suitName.substringAfter('_', "")
+
             return CommanderLoadout(
                 true,
                 loadoutElement.asJsonObject.get("loadoutSlotId").asInt,
                 loadoutName,
-                loadoutElement.asJsonObject.get("suit").asJsonObject.get("locName").asString,
+                suitElement.asJsonObject.get("locName").asString,
+                suitName.substringBefore('_'),
+                if(suitClassName.isEmpty()) -1 else suitClassName.last().digitToInt(),
                 getWeaponFromLoadoutResponse(slotsObject, "PrimaryWeapon1"),
                 getWeaponFromLoadoutResponse(slotsObject, "PrimaryWeapon2"),
                 getWeaponFromLoadoutResponse(slotsObject, "SecondaryWeapon")

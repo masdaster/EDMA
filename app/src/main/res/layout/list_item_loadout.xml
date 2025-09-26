@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/cardView"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -11,24 +12,39 @@
     app:cardUseCompatPadding="true">
 
     <RelativeLayout
-        android:id="@+id/itemLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/shipImageView"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:orientation="vertical"
-        android:paddingLeft="24dp"
-        android:paddingTop="24dp"
-        android:paddingRight="24dp"
-        android:paddingBottom="24dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <include
-            android:id="@+id/currentLoadoutLayout"
-            layout="@layout/include_loadout_details"
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/suitImageView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp" />
+            android:adjustViewBounds="true"
+            app:riv_corner_radius_top_left="@dimen/card_corner_radius"
+            app:riv_corner_radius_top_right="@dimen/card_corner_radius"
+            tools:src="@drawable/remlok_flight_suit" />
 
+        <RelativeLayout
+            android:id="@+id/itemLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/suitImageView"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:orientation="vertical"
+            android:paddingLeft="24dp"
+            android:paddingTop="24dp"
+            android:paddingRight="24dp"
+            android:paddingBottom="24dp">
+
+            <include
+                android:id="@+id/currentLoadoutLayout"
+                layout="@layout/include_loadout_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp" />
+
+        </RelativeLayout>
     </RelativeLayout>
 </com.google.android.material.card.MaterialCardView>
