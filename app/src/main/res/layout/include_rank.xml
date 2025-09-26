@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/itemImageView"
-        android:layout_width="18dp"
-        android:layout_height="18dp"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
         android:layout_alignParentStart="true"
         app:srcCompat="@drawable/rank_placeholder"
         app:tint="#757575" />
@@ -19,7 +19,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_toEndOf="@id/itemImageView">
+        android:layout_toEndOf="@id/itemImageView"
+        android:layout_centerVertical="true">
 
         <TextView
             android:id="@+id/titleTextView"
