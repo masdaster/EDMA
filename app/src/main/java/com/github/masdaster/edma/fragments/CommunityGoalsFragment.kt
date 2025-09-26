@@ -1,5 +1,9 @@
 package com.github.masdaster.edma.fragments
 
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import com.github.masdaster.edma.adapters.CommunityGoalsAdapter
 import com.github.masdaster.edma.models.CommanderPosition
@@ -7,13 +11,11 @@ import com.github.masdaster.edma.models.CommunityGoal
 import com.github.masdaster.edma.models.ProxyResult
 import com.github.masdaster.edma.models.SystemsDistance
 import com.github.masdaster.edma.models.events.CommunityGoals
-import com.github.masdaster.edma.network.CommunityGoalsNetwork
 import com.github.masdaster.edma.utils.CommanderUtils
 import com.github.masdaster.edma.utils.NotificationsUtils
 import com.github.masdaster.edma.view_models.CommanderViewModel
+import com.github.masdaster.edma.view_models.CommunityGoalsViewModel
 import com.github.masdaster.edma.view_models.DistanceCalculatorViewModel
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 
 
 class CommunityGoalsFragment : AbstractListFragment<CommunityGoalsAdapter>() {
@@ -23,22 +25,34 @@ class CommunityGoalsFragment : AbstractListFragment<CommunityGoalsAdapter>() {
 
     private val commanderViewModel: CommanderViewModel by activityViewModels()
     private val distanceViewModel: DistanceCalculatorViewModel by activityViewModels()
+    private val communityGoalsViewModel: CommunityGoalsViewModel by activityViewModels()
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val view = super.onCreateView(inflater, container, savedInstanceState)
+
+        communityGoalsViewModel.getCommunityGoals()
+            .observe(viewLifecycleOwner, ::onCommunityGoalEvent)
+        return view;
+    }
 
     override fun getNewRecyclerViewAdapter(): CommunityGoalsAdapter {
         return CommunityGoalsAdapter(context, binding.recyclerView, false)
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onCommunityGoalEvent(goals: CommunityGoals) {
+    private fun onCommunityGoalEvent(goals: ProxyResult<CommunityGoals>) {
         // Error
-        if (!goals.success) {
+        if (goals.error != null || goals.data == null) {
             endLoading(true)
             NotificationsUtils.displayGenericDownloadErrorSnackbar(activity)
             return
         }
 
-        endLoading(goals.goalsList.isEmpty())
-        communityGoals = goals.goalsList
+        endLoading(goals.data.goalsList.isEmpty())
+        communityGoals = goals.data.goalsList
         recyclerViewAdapter.submitList(communityGoals)
 
         val currentContext = context
@@ -52,9 +66,8 @@ class CommunityGoalsFragment : AbstractListFragment<CommunityGoalsAdapter>() {
         }
 
         // Setup player distance viewmodel observer
-        distanceViewModel.getDistanceBetweenSystemsResult().observe(viewLifecycleOwner, {
-            onDistanceResult(it)
-        })
+        distanceViewModel.getDistanceBetweenSystemsResult()
+            .observe(viewLifecycleOwner, ::onDistanceResult)
     }
 
     private fun refreshDisplayWithCommanderPosition(position: CommanderPosition) {
@@ -96,8 +109,9 @@ class CommunityGoalsFragment : AbstractListFragment<CommunityGoalsAdapter>() {
         recyclerViewAdapter.submitList(communityGoals) // submit a copy for diffutils to work
     }
 
+
     override fun getData() {
-        CommunityGoalsNetwork.getCommunityGoals(context)
+        communityGoalsViewModel.fetchCommunityGoals()
     }
 
     companion object {

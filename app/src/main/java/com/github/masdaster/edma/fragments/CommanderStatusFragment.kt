@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout.OnRefreshListener
@@ -14,10 +15,22 @@ import com.github.masdaster.edma.R
 import com.github.masdaster.edma.activities.LoginActivity
 import com.github.masdaster.edma.activities.SettingsActivity
 import com.github.masdaster.edma.databinding.FragmentCommanderStatusBinding
-import com.github.masdaster.edma.models.*
+import com.github.masdaster.edma.models.CommanderCredits
+import com.github.masdaster.edma.models.CommanderFleet
+import com.github.masdaster.edma.models.CommanderLoadout
+import com.github.masdaster.edma.models.CommanderLoadoutWeapon
+import com.github.masdaster.edma.models.CommanderPosition
+import com.github.masdaster.edma.models.CommanderRanks
+import com.github.masdaster.edma.models.ProxyResult
 import com.github.masdaster.edma.models.exceptions.DataNotInitializedException
 import com.github.masdaster.edma.models.exceptions.FrontierAuthNeededException
-import com.github.masdaster.edma.utils.*
+import com.github.masdaster.edma.utils.CommanderUtils
+import com.github.masdaster.edma.utils.InternalNamingUtils
+import com.github.masdaster.edma.utils.MathUtils
+import com.github.masdaster.edma.utils.MiscUtils
+import com.github.masdaster.edma.utils.NotificationsUtils
+import com.github.masdaster.edma.utils.RankUtils
+import com.github.masdaster.edma.utils.SettingsUtils
 import com.github.masdaster.edma.view_models.CommanderViewModel
 
 class CommanderStatusFragment : Fragment() {
@@ -27,10 +40,12 @@ class CommanderStatusFragment : Fragment() {
     }
 
     private var frontierLoginNeeded: Boolean = false
+    private val frontierLoginNeededLock = Any()
 
     private var _binding: FragmentCommanderStatusBinding? = null
     private val binding get() = _binding!!
     private val viewModel: CommanderViewModel by activityViewModels()
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,7 +64,7 @@ class CommanderStatusFragment : Fragment() {
         //Swipe to refresh setup
         val listener = OnRefreshListener {
             binding.swipeContainer.isRefreshing = true
-            this.refreshCommanderInformations()
+            this.refreshCommanderStatus()
         }
         binding.swipeContainer.setOnRefreshListener(listener)
 
@@ -84,15 +99,38 @@ class CommanderStatusFragment : Fragment() {
             binding.arenaRankLayout.root,
             getString(R.string.rank_arena)
         )
+        RankUtils.setTempContent(
+            context,
+            binding.exobiologistRankLayout.root,
+            getString(R.string.rank_exobiologist)
+        )
+        RankUtils.setTempContent(
+            context,
+            binding.mercenaryRankLayout.root,
+            getString(R.string.rank_mercenary)
+        )
 
-        // Hide views according to supported informations from source
+        // Hide views according to supported content from source
         val currentContext = context
         if (currentContext != null) {
             if (!CommanderUtils.hasCreditsData(currentContext)) {
                 binding.creditsContainer.visibility = View.GONE
+            } else {
+                binding.creditsContainer.visibility = View.VISIBLE
             }
+
             if (!CommanderUtils.hasPositionData(currentContext)) {
                 binding.locationContainer.visibility = View.GONE
+            } else {
+                binding.locationContainer.visibility = View.VISIBLE
+            }
+
+            if (!CommanderUtils.hasOdysseyRanks(currentContext)) {
+                binding.exobiologistRankLayout.rankRelativeLayout.visibility = View.GONE
+                binding.mercenaryRankLayout.rankRelativeLayout.visibility = View.GONE
+            } else {
+                binding.exobiologistRankLayout.rankRelativeLayout.visibility = View.VISIBLE
+                binding.mercenaryRankLayout.rankRelativeLayout.visibility = View.VISIBLE
             }
         }
 
@@ -109,12 +147,15 @@ class CommanderStatusFragment : Fragment() {
         viewModel.getFleet().observe(viewLifecycleOwner) {
             onFleetChange(it)
         }
+        viewModel.getLoadout().observe(viewLifecycleOwner) {
+            onLoadoutChange(it)
+        }
 
-        // Display message if no source, else fetch informations
+        // Display message if no source, else fetch content
         if (currentContext != null) {
-            if (CommanderUtils.hasCommanderInformations(currentContext)) {
+            if (CommanderUtils.hasCommanderStatus(currentContext)) {
                 startLoading()
-                this.refreshCommanderInformations()
+                this.refreshCommanderStatus()
             } else {
 
                 val dialog = MaterialAlertDialogBuilder(currentContext)
@@ -150,7 +191,7 @@ class CommanderStatusFragment : Fragment() {
         endLoading()
 
         // Show dialog but only once
-        synchronized(frontierLoginNeeded) {
+        synchronized(frontierLoginNeededLock) {
             if (frontierLoginNeeded) {
                 return
             }
@@ -182,7 +223,7 @@ class CommanderStatusFragment : Fragment() {
         MiscUtils.startIntentToSystemDetails(context, text)
     }
 
-    private fun refreshCommanderInformations() {
+    private fun refreshCommanderStatus() {
         val currentContext = context
         if (currentContext != null) {
             val cmdrName = CommanderUtils.getCommanderName(currentContext)
@@ -194,9 +235,11 @@ class CommanderStatusFragment : Fragment() {
         viewModel.fetchCredits()
         viewModel.fetchPosition()
         viewModel.fetchRanks()
+        viewModel.fetchCurrentLoadout()
 
-        // we do not really need fleet except to preload for other tab and to display auth popup if needed
+        // We do not really need fleet/loadouts except to preload for other tab and to display auth popup if needed
         viewModel.fetchFleet()
+        viewModel.fetchAllLoadouts()
     }
 
     private fun <T> handleResult(result: ProxyResult<T>, onSuccess: (ProxyResult<T>) -> Unit) {
@@ -219,6 +262,79 @@ class CommanderStatusFragment : Fragment() {
     private fun onFleetChange(result: ProxyResult<CommanderFleet>) {
         handleResult(result) {}
     }
+
+    private fun setLoadoutWeaponDisplay(
+        weapon: CommanderLoadoutWeapon?,
+        labelTextView: TextView,
+        textView: TextView
+    ) {
+        if (weapon != null) {
+            labelTextView.visibility = View.VISIBLE
+            textView.visibility = View.VISIBLE
+
+            if (weapon.magazineName != null) {
+                textView.text = getString(
+                    R.string.weapon_display,
+                    weapon.name,
+                    weapon.magazineName
+                )
+            } else {
+                textView.text = getString(
+                    R.string.weapon_display_without_magazine,
+                    weapon.name
+                )
+            }
+
+        } else {
+            labelTextView.visibility = View.GONE
+            textView.visibility = View.GONE
+        }
+    }
+
+    private fun onLoadoutChange(result: ProxyResult<CommanderLoadout>) {
+        // Don't display if not enabled
+        if (!SettingsUtils.getBoolean(
+                context,
+                getString(R.string.settings_cmdr_loadout_display_enable),
+                true
+            )
+        ) {
+            binding.currentLoadoutLayout.loadoutContainer.visibility = View.GONE
+            return
+        }
+
+        handleResult(result) {
+            if (result.data == null) {
+                return@handleResult
+            }
+
+            if (result.data.hasLoadout) {
+                binding.currentLoadoutLayout.loadoutContainer.visibility = View.VISIBLE
+                binding.currentLoadoutLayout.suitTextView.text = result.data.suitName
+
+                // Weapons
+                setLoadoutWeaponDisplay(
+                    result.data.firstPrimaryWeapon,
+                    binding.currentLoadoutLayout.firstPrimaryWeaponLabelTextView,
+                    binding.currentLoadoutLayout.firstPrimaryWeaponTextView
+                )
+                setLoadoutWeaponDisplay(
+                    result.data.secondPrimaryWeapon,
+                    binding.currentLoadoutLayout.secondaryPrimaryWeaponLabelTextView,
+                    binding.currentLoadoutLayout.secondaryPrimaryWeaponTextView
+                )
+                setLoadoutWeaponDisplay(
+                    result.data.secondaryWeapon,
+                    binding.currentLoadoutLayout.secondaryWeaponLabelTextView,
+                    binding.currentLoadoutLayout.secondarWeaponTextView
+                )
+
+            } else {
+                binding.currentLoadoutLayout.loadoutContainer.visibility = View.GONE
+            }
+        }
+    }
+
 
     private fun onPositionChange(result: ProxyResult<CommanderPosition>) {
         handleResult(result) {
@@ -247,7 +363,6 @@ class CommanderStatusFragment : Fragment() {
                 binding.creditsTextView.text = resources.getString(R.string.credits, amount)
             }
         }
-
     }
 
     private fun onRanksChange(result: ProxyResult<CommanderRanks>) {
@@ -285,6 +400,21 @@ class CommanderStatusFragment : Fragment() {
                 InternalNamingUtils.getCqcLogoId(ranks.cqc.value), ranks.cqc,
                 getString(R.string.rank_arena)
             )
+
+            if (ranks.exobiologist != null) {
+                RankUtils.setContent(
+                    context, binding.exobiologistRankLayout.root,
+                    R.drawable.rank_placeholder, ranks.exobiologist,
+                    getString(R.string.rank_exobiologist)
+                )
+            }
+            if (ranks.mercenary != null) {
+                RankUtils.setContent(
+                    context, binding.mercenaryRankLayout.root,
+                    R.drawable.rank_placeholder, ranks.mercenary,
+                    getString(R.string.rank_mercenary)
+                )
+            }
         }
     }
 

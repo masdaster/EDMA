@@ -6,7 +6,16 @@ import com.google.gson.JsonElement
 import com.google.gson.JsonObject
 import com.google.gson.JsonParser
 import com.github.masdaster.edma.R
-import com.github.masdaster.edma.models.*
+import com.github.masdaster.edma.models.CommanderCredits
+import com.github.masdaster.edma.models.CommanderFleet
+import com.github.masdaster.edma.models.CommanderLoadout
+import com.github.masdaster.edma.models.CommanderLoadoutWeapon
+import com.github.masdaster.edma.models.CommanderLoadouts
+import com.github.masdaster.edma.models.CommanderPosition
+import com.github.masdaster.edma.models.CommanderRank
+import com.github.masdaster.edma.models.CommanderRanks
+import com.github.masdaster.edma.models.ProxyResult
+import com.github.masdaster.edma.models.Ship
 import com.github.masdaster.edma.models.apis.Frontier.FrontierProfileResponse
 import com.github.masdaster.edma.models.apis.Frontier.FrontierProfileResponse.FrontierProfileCommanderRankResponse
 import com.github.masdaster.edma.models.exceptions.FrontierAuthNeededException
@@ -19,8 +28,8 @@ import org.threeten.bp.Instant
 
 class FrontierPlayer(val context: Context) : PlayerNetwork {
 
-    private val frontierRetrofit: FrontierRetrofit = RetrofitSingleton.getInstance()
-        .getFrontierRetrofit(context.applicationContext)
+    private val frontierRetrofit: FrontierRetrofit =
+        RetrofitSingleton.getInstance().getFrontierRetrofit(context.applicationContext)
 
     private var lastFetch: Instant = Instant.MIN
 
@@ -28,11 +37,13 @@ class FrontierPlayer(val context: Context) : PlayerNetwork {
     private var cachedCredits: CommanderCredits? = null
     private var cachedPosition: CommanderPosition? = null
     private var cachedFleet: CommanderFleet? = null
+    private var cachedCurrentLoadout: CommanderLoadout? = null
+    private var cachedAllLoadouts: CommanderLoadouts? = null
+
 
     override fun isUsable(): Boolean {
         return SettingsUtils.getBoolean(
-            context,
-            context.getString(R.string.settings_cmdr_frontier_enable)
+            context, context.getString(R.string.settings_cmdr_frontier_enable), false
         )
     }
 
@@ -60,49 +71,67 @@ class FrontierPlayer(val context: Context) : PlayerNetwork {
 
         // Combat
         val combatRank = CommanderRank(
-            context.resources
-                .getStringArray(R.array.ranks_combat)[apiRanks.Combat],
-            apiRanks.Combat, -1
+            context.resources.getStringArray(R.array.ranks_combat)[apiRanks.Combat],
+            apiRanks.Combat,
+            -1
         )
 
         // Trade
         val tradeRank = CommanderRank(
-            context.resources
-                .getStringArray(R.array.ranks_trade)[apiRanks.Trade],
-            apiRanks.Trade, -1
+            context.resources.getStringArray(R.array.ranks_trade)[apiRanks.Trade],
+            apiRanks.Trade,
+            -1
         )
 
         // Explore
         val exploreRank = CommanderRank(
-            context.resources
-                .getStringArray(R.array.ranks_explorer)[apiRanks.Explore],
-            apiRanks.Explore, -1
+            context.resources.getStringArray(R.array.ranks_explorer)[apiRanks.Explore],
+            apiRanks.Explore,
+            -1
         )
 
         // CQC
         val cqcRank = CommanderRank(
-            context.resources
-                .getStringArray(R.array.ranks_cqc)[apiRanks.Cqc],
-            apiRanks.Cqc, -1
+            context.resources.getStringArray(R.array.ranks_cqc)[apiRanks.Cqc], apiRanks.Cqc, -1
+        )
+
+        // Merceneray
+        val mercenaryRank = CommanderRank(
+            context.resources.getStringArray(R.array.ranks_mercenary)[apiRanks.Mercenary],
+            apiRanks.Mercenary,
+            -1
+        )
+
+        // Exobiologist
+        val exobiologistRank = CommanderRank(
+            context.resources.getStringArray(R.array.ranks_exobiologist)[apiRanks.Exobiologist],
+            apiRanks.Exobiologist,
+            -1
         )
 
         // Federation
         val federationRank = CommanderRank(
-            context.resources
-                .getStringArray(R.array.ranks_federation)[apiRanks.Federation],
-            apiRanks.Federation, -1
+            context.resources.getStringArray(R.array.ranks_federation)[apiRanks.Federation],
+            apiRanks.Federation,
+            -1
         )
 
         // Empire
         val empireRank = CommanderRank(
-            context.resources
-                .getStringArray(R.array.ranks_empire)[apiRanks.Empire],
-            apiRanks.Empire, -1
+            context.resources.getStringArray(R.array.ranks_empire)[apiRanks.Empire],
+            apiRanks.Empire,
+            -1
         )
 
         return CommanderRanks(
-            combatRank, tradeRank, exploreRank,
-            cqcRank, federationRank, empireRank
+            combatRank,
+            tradeRank,
+            exploreRank,
+            cqcRank,
+            exobiologistRank,
+            mercenaryRank,
+            federationRank,
+            empireRank
         )
     }
 
@@ -110,31 +139,126 @@ class FrontierPlayer(val context: Context) : PlayerNetwork {
         try {
             val apiResponse = frontierRetrofit.getProfileRaw()
             val rawResponse = JsonParser.parseString(apiResponse.string()).asJsonObject
-            val profileResponse = Gson()
-                .fromJson(rawResponse, FrontierProfileResponse::class.java)
+            val profileResponse = Gson().fromJson(rawResponse, FrontierProfileResponse::class.java)
 
             cachedPosition = CommanderPosition(
-                profileResponse.LastSystem.Name,
-                false
+                profileResponse.LastSystem.Name, false
             )
             cachedCredits =
                 CommanderCredits(profileResponse.Commander.Credits, profileResponse.Commander.Debt)
             cachedRanks = getRanksFromApiResponse(profileResponse)
+            cachedAllLoadouts = getAllLoadoutsFromApiResponse(rawResponse)
+            cachedCurrentLoadout =
+                getCurrentLoadoutFromApiResponse(rawResponse) // cannot get from the list as it has less informations
             cachedFleet = getFleetFromApiResponse(rawResponse)
         } catch (t: FrontierAuthNeededException) {
             lastFetch = Instant.MIN
             cachedCredits = null
             cachedRanks = null
             cachedFleet = null
+            cachedCurrentLoadout = null
+            cachedAllLoadouts = null
             throw t
         }
     }
 
+    private fun getWeaponFromLoadoutResponse(
+        slotsObject: JsonObject, weaponSlotName: String
+    ): CommanderLoadoutWeapon? {
+        try {
+            if (!slotsObject.has(weaponSlotName)) {
+                return null
+            }
+
+            val weaponObject = slotsObject.get(weaponSlotName).asJsonObject
+            var magazineName: String? = null
+
+            // If getting weapon for all loadouts the slots are not included in the response
+            if (weaponObject.has("slots") && weaponObject.get("slots").asJsonObject.has("Magazine")) {
+                val magazine = weaponObject.get("slots").asJsonObject.get("Magazine").asJsonObject
+                magazineName = magazine.get("locName").asString
+            }
+
+            return CommanderLoadoutWeapon(
+                name = weaponObject.get("locName").asString,
+                magazineName = magazineName,
+            )
+        } catch (t: Throwable) {
+            return null
+        }
+    }
+
+    private fun getCurrentLoadoutFromApiResponse(profileResponse: JsonObject): CommanderLoadout {
+        try {
+            val loadoutElement = profileResponse.get("loadout")
+            val slotsObject = loadoutElement.asJsonObject.get("slots").asJsonObject
+
+            var loadoutName: String? = null
+            if (loadoutElement.asJsonObject.has("name")) {
+                loadoutName = loadoutElement.asJsonObject.get("name").asString
+            }
+
+            return CommanderLoadout(
+                true,
+                loadoutElement.asJsonObject.get("loadoutSlotId").asInt,
+                loadoutName,
+                loadoutElement.asJsonObject.get("suit").asJsonObject.get("locName").asString,
+                getWeaponFromLoadoutResponse(slotsObject, "PrimaryWeapon1"),
+                getWeaponFromLoadoutResponse(slotsObject, "PrimaryWeapon2"),
+                getWeaponFromLoadoutResponse(slotsObject, "SecondaryWeapon")
+            )
+
+        } catch (t: Throwable) {
+            return CommanderLoadout(
+                false, -1, null, context.getString(R.string.unknown), null, null, null
+            )
+        }
+    }
+
+    private fun getLoadoutFromApiResponseItem(loadoutElement: JsonElement): CommanderLoadout? {
+        try {
+            val slotsObject = loadoutElement.asJsonObject.get("slots").asJsonObject
+
+            var loadoutName: String? = null
+            if (loadoutElement.asJsonObject.has("name")) {
+                loadoutName = loadoutElement.asJsonObject.get("name").asString
+            }
+
+            return CommanderLoadout(
+                true,
+                loadoutElement.asJsonObject.get("loadoutSlotId").asInt,
+                loadoutName,
+                loadoutElement.asJsonObject.get("suit").asJsonObject.get("locName").asString,
+                getWeaponFromLoadoutResponse(slotsObject, "PrimaryWeapon1"),
+                getWeaponFromLoadoutResponse(slotsObject, "PrimaryWeapon2"),
+                getWeaponFromLoadoutResponse(slotsObject, "SecondaryWeapon")
+            )
+
+        } catch (_: Throwable) {
+        }
+        return null
+    }
+
+    private fun getAllLoadoutsFromApiResponse(loadoutsElement: JsonObject): CommanderLoadouts {
+        val loadouts = mutableListOf<CommanderLoadout>()
+
+        // Sometimes the cAPI return an array, sometimes an object with indexes
+        if (loadoutsElement.get("loadouts").isJsonObject) {
+            for ((_, loadout) in loadoutsElement.get("loadouts").asJsonObject.entrySet()) {
+                getLoadoutFromApiResponseItem(loadout)?.let { loadouts.add(it) }
+            }
+        } else {
+            for (loadout in loadoutsElement.get("loadouts").asJsonArray) {
+                getLoadoutFromApiResponseItem(loadout)?.let { loadouts.add(it) }
+            }
+        }
+
+        return CommanderLoadouts(loadouts = loadouts)
+    }
+
     private fun getFleetFromApiResponse(profileResponse: JsonObject): CommanderFleet {
-        val currentShipId: Int = profileResponse.get("commander")
-            .asJsonObject
-            .get("currentShipId")
-            .asInt
+        val currentShipId: Int =
+            profileResponse.get("commander").asJsonObject.get("currentShipId").asInt
 
         // Sometimes the cAPI return an array, sometimes an object with indexes
         val responseList: MutableList<JsonElement> = ArrayList()
@@ -215,6 +339,32 @@ class FrontierPlayer(val context: Context) : PlayerNetwork {
         return try {
             getProfile()
             ProxyResult(cachedFleet)
+        } catch (t: Throwable) {
+            ProxyResult(data = null, error = t)
+        }
+    }
+
+    override suspend fun getCurrentLoadout(): ProxyResult<CommanderLoadout> {
+        if (!shouldFetchNewData() && cachedCurrentLoadout != null) {
+            return ProxyResult(cachedCurrentLoadout)
+        }
+
+        return try {
+            getProfile()
+            ProxyResult(cachedCurrentLoadout)
+        } catch (t: Throwable) {
+            ProxyResult(data = null, error = t)
+        }
+    }
+
+    override suspend fun getAllLoadouts(): ProxyResult<CommanderLoadouts> {
+        if (!shouldFetchNewData() && cachedAllLoadouts != null) {
+            return ProxyResult(cachedAllLoadouts)
+        }
+
+        return try {
+            getProfile()
+            ProxyResult(cachedAllLoadouts)
         } catch (t: Throwable) {
             ProxyResult(data = null, error = t)
         }

@@ -16,7 +16,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import java.text.NumberFormat;
 
 import com.github.masdaster.edma.R;
-import com.github.masdaster.edma.activities.SystemDetailsActivity;
+import com.github.masdaster.edma.activities.CommodityDetailsActivity;
 import com.github.masdaster.edma.databinding.FragmentCommodityDetailsBinding;
 import com.github.masdaster.edma.models.CommodityDetailsResult;
 import com.github.masdaster.edma.utils.MathUtils;
@@ -38,7 +38,7 @@ public class CommodityDetailsFragment extends Fragment {
         SwipeRefreshLayout.OnRefreshListener listener = () -> {
             binding.swipeContainer.setRefreshing(true);
             if (getActivity() != null) {
-                ((SystemDetailsActivity) getActivity()).getData();
+                ((CommodityDetailsActivity) getActivity()).getData();
             }
         };
         binding.swipeContainer.setOnRefreshListener(listener);
@@ -78,10 +78,10 @@ public class CommodityDetailsFragment extends Fragment {
     public void onCommodityDetailsEvent(CommodityDetailsResult commodityDetailsResult) {
         endLoading();
 
-        bindInformations(commodityDetailsResult);
+        bindContent(commodityDetailsResult);
     }
 
-    private void bindInformations(CommodityDetailsResult details) {
+    private void bindContent(CommodityDetailsResult details) {
         binding.commodityNameTextView.setText(details.getName());
         binding.isRareTextView.setVisibility(details.isRare() ? View.VISIBLE : View.GONE);
         binding.categoryTextView.setText(details.getCategory());

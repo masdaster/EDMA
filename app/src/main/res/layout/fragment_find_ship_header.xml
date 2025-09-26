@@ -54,7 +54,7 @@
                 app:hint="@string/current_system" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/commodityInputLayout"
+                android:id="@+id/outfittingInputLayout"
                 style="@style/Widget.Material3.TextInputLayout.OutlinedBox.Dense"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -75,7 +75,7 @@
 
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/commodityInputLayout"
+                android:layout_below="@id/outfittingInputLayout"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="8dp"
                 android:text="@string/find" />

@@ -20,10 +20,11 @@ import java.text.NumberFormat;
 
 import com.github.masdaster.edma.R;
 import com.github.masdaster.edma.databinding.FragmentFindCommodityHeaderBinding;
-import com.github.masdaster.edma.databinding.ListItemCommodityFinderResultBinding;
+import com.github.masdaster.edma.databinding.ListStationFinderResultBinding;
 import com.github.masdaster.edma.models.CommodityFinderResult;
 import com.github.masdaster.edma.models.events.CommodityFinderSearch;
 import com.github.masdaster.edma.utils.MathUtils;
+import com.github.masdaster.edma.utils.StationTypeUtils;
 import com.github.masdaster.edma.utils.ViewUtils;
 
 public class CommodityFinderAdapter extends FinderAdapter<CommodityFinderAdapter.HeaderViewHolder, CommodityFinderAdapter.ResultViewHolder, CommodityFinderResult> {
@@ -44,7 +45,7 @@ public class CommodityFinderAdapter extends FinderAdapter<CommodityFinderAdapter
 
     @Override
     protected RecyclerView.ViewHolder getResultViewHolder(@NonNull @NotNull ViewGroup parent) {
-        ListItemCommodityFinderResultBinding resultBinding = ListItemCommodityFinderResultBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        ListStationFinderResultBinding resultBinding = ListStationFinderResultBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
         return new ResultViewHolder(resultBinding);
     }
 
@@ -94,7 +95,7 @@ public class CommodityFinderAdapter extends FinderAdapter<CommodityFinderAdapter
             // Convert stock value to int
             String stockString = holder.binding.stockInputEditText.getText().toString();
             int stock = 0;
-            if (stockString.length() != 0) {
+            if (!stockString.isEmpty()) {
                 try {
                     stock = Integer.parseInt(stockString);
                 } catch (NumberFormatException ignored) {
@@ -145,7 +146,18 @@ public class CommodityFinderAdapter extends FinderAdapter<CommodityFinderAdapter
                 0, FORMAT_ABBREV_RELATIVE).toString();
         holder.binding.lastUpdateTextView.setText(date);
 
-        // Other informations
+        // Display is special type (fleet carrier, settlement etc...)
+        String stationType = StationTypeUtils.INSTANCE.getStationTypeText(
+                context,
+                currentResult.isPlanetary(),
+                currentResult.isFleetCarrier(),
+                currentResult.isSettlement()
+        );
+        holder.binding.stationTypeTextView.setText(stationType);
+        holder.binding.stationTypeTextView.setVisibility(stationType != null ? View.VISIBLE : View.GONE);
+
+
+        // Other information
         holder.binding.titleTextView.setText(String.format("%s - %s", currentResult.getSystem(),
                 currentResult.getStation()));
         holder.binding.isPlanetaryImageView.setVisibility(
@@ -163,9 +175,9 @@ public class CommodityFinderAdapter extends FinderAdapter<CommodityFinderAdapter
 
     public static class ResultViewHolder extends RecyclerView.ViewHolder {
 
-        private final ListItemCommodityFinderResultBinding binding;
+        private final ListStationFinderResultBinding binding;
 
-        public ResultViewHolder(ListItemCommodityFinderResultBinding binding) {
+        public ResultViewHolder(ListStationFinderResultBinding binding) {
             super(binding.getRoot());
             this.binding = binding;
         }

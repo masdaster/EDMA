@@ -52,8 +52,8 @@
                         android:layout_height="18dp"
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:tint="#757575"
-                        app:srcCompat="@drawable/ic_attach_money_gray600_24dp" />
+                        app:srcCompat="@drawable/ic_attach_money_gray600_24dp"
+                        app:tint="#757575" />
 
                     <TextView
                         android:id="@+id/creditsTextView"
@@ -78,8 +78,8 @@
                         android:layout_height="18dp"
                         android:layout_alignParentStart="true"
                         android:layout_centerVertical="true"
-                        android:tint="#757575"
-                        app:srcCompat="@drawable/elite_map_marker" />
+                        app:srcCompat="@drawable/elite_map_marker"
+                        app:tint="#757575" />
 
                     <TextView
                         android:id="@+id/locationTextView"
@@ -91,11 +91,19 @@
                         android:textAppearance="@style/TextAppearance.AppCompat.Small" />
                 </RelativeLayout>
 
+                <include
+                    android:id="@+id/currentLoadoutLayout"
+                    layout="@layout/include_loadout_details"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/locationContainer"
+                    android:layout_marginTop="8dp" />
+
                 <TextView
                     android:id="@+id/factionsRanks"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/locationContainer"
+                    android:layout_below="@+id/currentLoadoutLayout"
                     android:layout_marginTop="8dp"
                     android:text="@string/faction_ranks"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
@@ -153,6 +161,19 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/explorationRankLayout" />
 
+                <include
+                    android:id="@+id/mercenaryRankLayout"
+                    layout="@layout/include_rank"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/arenaRankLayout" />
+
+                <include
+                    android:id="@+id/exobiologistRankLayout"
+                    layout="@layout/include_rank"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/mercenaryRankLayout" />
             </RelativeLayout>
 
         </com.google.android.material.card.MaterialCardView>

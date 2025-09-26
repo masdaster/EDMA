@@ -1,12 +1,20 @@
 package com.github.masdaster.edma.fragments
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.preference.ListPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
+import androidx.preference.SwitchPreference
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.github.masdaster.edma.R
 import com.github.masdaster.edma.activities.LoginActivity
 
@@ -67,7 +75,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
             }
 
         private fun bindPreferenceSummaryToValue(preference: Preference) { // Set the listener to watch for value changes.
-            preference?.onPreferenceChangeListener = preferenceChangeListener
+            preference.onPreferenceChangeListener = preferenceChangeListener
 
             // Trigger the listener immediately with the preference's current value.
             preferenceChangeListener.onPreferenceChange(

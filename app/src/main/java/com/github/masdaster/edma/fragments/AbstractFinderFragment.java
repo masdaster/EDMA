@@ -20,9 +20,8 @@ import com.github.masdaster.edma.utils.NotificationsUtils;
 
 public abstract class AbstractFinderFragment<TAdapter extends FinderAdapter> extends Fragment {
 
-    private FragmentFinderBinding binding;
-
     protected TAdapter recyclerViewAdapter;
+    private FragmentFinderBinding binding;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,

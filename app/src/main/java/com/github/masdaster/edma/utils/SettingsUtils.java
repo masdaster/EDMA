@@ -3,12 +3,13 @@ package com.github.masdaster.edma.utils;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
+
+import androidx.preference.PreferenceManager;
 
 public class SettingsUtils {
-    public static boolean getBoolean(Context c, String key) {
+    public static boolean getBoolean(Context c, String key, Boolean defaultValue) {
         return PreferenceManager.getDefaultSharedPreferences(c)
-                .getBoolean(key, false);
+                .getBoolean(key, defaultValue);
     }
 
     public static int getInt(Context c, String key) {

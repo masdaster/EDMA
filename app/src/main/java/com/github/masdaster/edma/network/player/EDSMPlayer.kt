@@ -2,7 +2,14 @@ package com.github.masdaster.edma.network.player
 
 import android.content.Context
 import com.github.masdaster.edma.R
-import com.github.masdaster.edma.models.*
+import com.github.masdaster.edma.models.CommanderCredits
+import com.github.masdaster.edma.models.CommanderFleet
+import com.github.masdaster.edma.models.CommanderLoadout
+import com.github.masdaster.edma.models.CommanderLoadouts
+import com.github.masdaster.edma.models.CommanderPosition
+import com.github.masdaster.edma.models.CommanderRank
+import com.github.masdaster.edma.models.CommanderRanks
+import com.github.masdaster.edma.models.ProxyResult
 import com.github.masdaster.edma.network.retrofit.EDSMRetrofit
 import com.github.masdaster.edma.singletons.RetrofitSingleton
 import com.github.masdaster.edma.utils.SettingsUtils
@@ -24,7 +31,11 @@ class EDSMPlayer(val context: Context) : PlayerNetwork {
 
     override fun isUsable(): Boolean {
         val enabled =
-            SettingsUtils.getBoolean(context, context.getString(R.string.settings_cmdr_edsm_enable))
+            SettingsUtils.getBoolean(
+                context,
+                context.getString(R.string.settings_cmdr_edsm_enable),
+                false
+            )
         return enabled && !commanderName.isNullOrEmpty() && !apiKey.isNullOrEmpty()
     }
 
@@ -67,6 +78,16 @@ class EDSMPlayer(val context: Context) : PlayerNetwork {
                 apiRanks.ranks.cqc,
                 apiRanks.progress.cqc
             )
+            val mercenaryRank = CommanderRank(
+                apiRanks.ranksNames.mercenary,
+                apiRanks.ranks.mercenary,
+                apiRanks.progress.mercenary
+            )
+            val exobiologistRank = CommanderRank(
+                apiRanks.ranksNames.exobiologist,
+                apiRanks.ranks.exobiologist,
+                apiRanks.progress.exobiologist
+            )
             val federationRank = CommanderRank(
                 apiRanks.ranksNames.federation,
                 apiRanks.ranks.federation,
@@ -84,6 +105,8 @@ class EDSMPlayer(val context: Context) : PlayerNetwork {
                     tradeRank,
                     exploreRank,
                     cqcRank,
+                    exobiologistRank,
+                    mercenaryRank,
                     federationRank,
                     empireRank
                 ), error = null
@@ -109,6 +132,14 @@ class EDSMPlayer(val context: Context) : PlayerNetwork {
     }
 
     override suspend fun getFleet(): ProxyResult<CommanderFleet> {
-        throw UnsupportedOperationException("EDSM cannot fetch fleet informations")
+        throw UnsupportedOperationException("EDSM cannot fetch fleet")
+    }
+
+    override suspend fun getCurrentLoadout(): ProxyResult<CommanderLoadout> {
+        throw UnsupportedOperationException("EDSM cannot fetch loadout")
+    }
+
+    override suspend fun getAllLoadouts(): ProxyResult<CommanderLoadouts> {
+        throw UnsupportedOperationException("EDSM cannot fetch loadouts")
     }
 }

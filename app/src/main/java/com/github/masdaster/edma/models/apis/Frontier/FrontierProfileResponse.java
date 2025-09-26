@@ -11,20 +11,6 @@ public class FrontierProfileResponse {
     @SerializedName("lastSystem")
     public FrontierProfileSystemResponse LastSystem;
 
-    public class FrontierProfileCommanderResponse {
-        @SerializedName("name")
-        public String Name;
-
-        @SerializedName("credits")
-        public long Credits;
-
-        @SerializedName("debt")
-        public long Debt;
-
-        @SerializedName("rank")
-        public FrontierProfileCommanderRankResponse Rank;
-    }
-
     public static class FrontierProfileCommanderRankResponse {
         @SerializedName("combat")
         public int Combat;
@@ -52,10 +38,30 @@ public class FrontierProfileResponse {
 
         @SerializedName("cqc")
         public int Cqc;
+
+        @SerializedName("soldier")
+        public int Mercenary;
+
+        @SerializedName("exobiologist")
+        public int Exobiologist;
     }
 
     public static class FrontierProfileSystemResponse {
         @SerializedName("name")
         public String Name;
+    }
+
+    public static class FrontierProfileCommanderResponse {
+        @SerializedName("name")
+        public String Name;
+
+        @SerializedName("credits")
+        public long Credits;
+
+        @SerializedName("debt")
+        public long Debt;
+
+        @SerializedName("rank")
+        public FrontierProfileCommanderRankResponse Rank;
     }
 }

@@ -1,7 +1,17 @@
 package com.github.masdaster.edma.network.retrofit
 
-import com.github.masdaster.edma.models.apis.EDAPIV4.*
+import com.github.masdaster.edma.models.apis.EDAPIV4.CommodityBestPricesResponse
+import com.github.masdaster.edma.models.apis.EDAPIV4.CommodityFinderResponse
+import com.github.masdaster.edma.models.apis.EDAPIV4.CommodityWithPriceResponse
+import com.github.masdaster.edma.models.apis.EDAPIV4.CommunityGoalsResponse
+import com.github.masdaster.edma.models.apis.EDAPIV4.DistanceResponse
+import com.github.masdaster.edma.models.apis.EDAPIV4.GameServerHealthResponse
+import com.github.masdaster.edma.models.apis.EDAPIV4.NewsArticleResponse
 import com.github.masdaster.edma.models.apis.EDAPIV4.NewsArticleResponse.SystemHistoryResponse
+import com.github.masdaster.edma.models.apis.EDAPIV4.OutfittingFinderResponse
+import com.github.masdaster.edma.models.apis.EDAPIV4.ShipFinderResponse
+import com.github.masdaster.edma.models.apis.EDAPIV4.StationResponse
+import com.github.masdaster.edma.models.apis.EDAPIV4.SystemResponse
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -12,13 +22,11 @@ interface EDApiV4Retrofit {
     @GET("ships/typeahead")
     fun getShipsTypeAhead(@Query("input_text") shipName: String): Call<List<String>>
 
-    // TODO : convert to suspend/viewmodel etc...
     @GET("galnet")
-    fun getGalnetNews(@Query("lang") language: String): Call<List<NewsArticleResponse>>
+    suspend fun getGalnetNews(@Query("lang") language: String): List<NewsArticleResponse>
 
-    // TODO : convert to suspend/viewmodel etc...
     @GET("news")
-    fun getNews(@Query("lang") language: String): Call<List<NewsArticleResponse>>
+    suspend fun getNews(@Query("lang") language: String): List<NewsArticleResponse>
 
     // TODO : convert to suspend/viewmodel etc...
     @GET("systems/typeahead")
@@ -34,9 +42,8 @@ interface EDApiV4Retrofit {
     @GET("systems/{system}/stations")
     fun getSystemStations(@Path("system") system: String): Call<List<StationResponse>>
 
-    // TODO : convert to suspend/viewmodel etc...
     @GET("community_goals")
-    fun getCommunityGoals(): Call<List<CommunityGoalsResponse>>
+    suspend fun getCommunityGoals(): List<CommunityGoalsResponse>
 
     // TODO : convert to suspend/viewmodel etc...
     @GET("commodities/typeahead")
@@ -63,11 +70,15 @@ interface EDApiV4Retrofit {
 
     // TODO : convert to suspend/viewmodel etc...
     @GET("commodities/{commodity}/prices")
-    fun getCommodityPrice(@Path("commodity") commodity_name: String): Call<CommodityWithPriceResponse>
+    fun getCommodityPrice(@Path("commodity") commodityName: String): Call<CommodityWithPriceResponse>
 
     // TODO : convert to suspend/viewmodel etc...
     @GET("commodities/{commodity}/best_prices")
-    fun getCommodityBestPrices(@Path("commodity") commodity_name: String): Call<CommodityBestPricesResponse>
+    fun getCommodityBestPrices(@Path("commodity") commodityName: String): Call<CommodityBestPricesResponse>
+
+    // TODO : convert to suspend/viewmodel etc...
+    @GET("outfitting/typeahead")
+    fun getOutfittingTypeAhead(@Query("input_text") outfittingName: String): Call<List<String>>
 
     // TODO : convert to suspend/viewmodel etc...
     @GET("commodities/find")
@@ -75,7 +86,18 @@ interface EDApiV4Retrofit {
         @Query("reference_system") system: String,
         @Query("commodity") commodity: String,
         @Query("min_landing_pad_size") minLandingPad: String,
-        @Query("min_quantity") min_quantity: Int,
+        @Query("min_quantity") minQuantity: Int,
         @Query("mode") searchMode: String
     ): Call<List<CommodityFinderResponse>>
+
+    // TODO : convert to suspend/viewmodel etc...
+    @GET("outfitting/find")
+    fun findOutfitting(
+        @Query("reference_system") system: String,
+        @Query("outfitting") outfitting: String,
+        @Query("min_landing_pad_size") minLandingPad: String,
+    ): Call<List<OutfittingFinderResponse>>
+
+    @GET("game_server_health")
+    suspend fun getGameServerHealth(): GameServerHealthResponse
 }

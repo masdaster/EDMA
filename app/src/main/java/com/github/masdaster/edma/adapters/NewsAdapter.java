@@ -31,13 +31,13 @@ public class NewsAdapter extends androidx.recyclerview.widget.ListAdapter<NewsAr
     private final DateTimeFormatter dateFormatter;
     private final View.OnClickListener rootClickListener;
     private final boolean isDetailsView;
-    private RecyclerView recyclerView;
     private final boolean isGalnet;
+    private final RecyclerView recyclerView;
 
 
     public NewsAdapter(Context ctx, final RecyclerView recyclerView, boolean isDetailsView, boolean isGalnet) {
         // Parent class setup
-        super(new DiffUtil.ItemCallback<NewsArticle>() {
+        super(new DiffUtil.ItemCallback<>() {
             @Override
             public boolean areItemsTheSame(@NonNull NewsArticle oldItem,
                                            @NonNull NewsArticle newItem) {

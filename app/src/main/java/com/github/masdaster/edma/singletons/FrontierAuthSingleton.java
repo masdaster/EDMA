@@ -86,7 +86,7 @@ public class FrontierAuthSingleton implements Serializable {
         generateState();
 
         return ctx.getString(R.string.frontier_auth_base) + "auth" +
-                "?audience=all" +
+                "?audience=frontier,epic,steam" +
                 "&scope=auth%20capi" +
                 "&response_type=code" +
                 "&state=" + requestState +
@@ -107,7 +107,7 @@ public class FrontierAuthSingleton implements Serializable {
                 .getFrontierAuthRetrofit(ctx);
 
         retrofit2.Callback<FrontierAccessTokenResponse> callback =
-                new retrofit2.Callback<FrontierAccessTokenResponse>() {
+                new retrofit2.Callback<>() {
                     @Override
                     @EverythingIsNonNull
                     public void onResponse(Call<FrontierAccessTokenResponse> call,

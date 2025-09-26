@@ -3,7 +3,14 @@ package com.github.masdaster.edma.network.player
 import android.content.Context
 import com.github.masdaster.edma.BuildConfig
 import com.github.masdaster.edma.R
-import com.github.masdaster.edma.models.*
+import com.github.masdaster.edma.models.CommanderCredits
+import com.github.masdaster.edma.models.CommanderFleet
+import com.github.masdaster.edma.models.CommanderLoadout
+import com.github.masdaster.edma.models.CommanderLoadouts
+import com.github.masdaster.edma.models.CommanderPosition
+import com.github.masdaster.edma.models.CommanderRank
+import com.github.masdaster.edma.models.CommanderRanks
+import com.github.masdaster.edma.models.ProxyResult
 import com.github.masdaster.edma.models.apis.Inara.InaraProfileRequestBody
 import com.github.masdaster.edma.models.apis.Inara.InaraProfileRequestBody.InaraRequestBodyEvent
 import com.github.masdaster.edma.models.apis.Inara.InaraProfileRequestBody.InaraRequestBodyEvent.InaraRequestBodyEventData
@@ -27,7 +34,8 @@ class InaraPlayer(val context: Context) : PlayerNetwork {
         val enabled =
             SettingsUtils.getBoolean(
                 context,
-                context.getString(R.string.settings_cmdr_inara_enable)
+                context.getString(R.string.settings_cmdr_inara_enable),
+                false
             )
         return enabled && !apiKey.isNullOrEmpty()
     }
@@ -79,6 +87,7 @@ class InaraPlayer(val context: Context) : PlayerNetwork {
                             (rank.RankProgress * 100).toInt()
                         )
                     }
+
                     "trade" -> {
                         tradeRank = CommanderRank(
                             context.resources
@@ -87,6 +96,7 @@ class InaraPlayer(val context: Context) : PlayerNetwork {
                             (rank.RankProgress * 100).toInt()
                         )
                     }
+
                     "exploration" -> {
                         explorationRank = CommanderRank(
                             context.resources
@@ -95,6 +105,7 @@ class InaraPlayer(val context: Context) : PlayerNetwork {
                             (rank.RankProgress * 100).toInt()
                         )
                     }
+
                     "cqc" -> {
                         cqcRank = CommanderRank(
                             context.resources
@@ -103,6 +114,7 @@ class InaraPlayer(val context: Context) : PlayerNetwork {
                             (rank.RankProgress * 100).toInt()
                         )
                     }
+
                     "empire" -> {
                         empireRank = CommanderRank(
                             context.resources
@@ -111,6 +123,7 @@ class InaraPlayer(val context: Context) : PlayerNetwork {
                             (rank.RankProgress * 100).toInt()
                         )
                     }
+
                     "federation" -> {
                         federationRank = CommanderRank(
                             context.resources
@@ -129,6 +142,8 @@ class InaraPlayer(val context: Context) : PlayerNetwork {
                     tradeRank,
                     explorationRank,
                     cqcRank,
+                    null,
+                    null,
                     federationRank,
                     empireRank
                 ), error = null
@@ -139,15 +154,23 @@ class InaraPlayer(val context: Context) : PlayerNetwork {
     }
 
     override suspend fun getCredits(): ProxyResult<CommanderCredits> {
-        throw UnsupportedOperationException("Inara cannot fetch credits informations")
+        throw UnsupportedOperationException("Inara cannot fetch credits")
     }
 
     override suspend fun getFleet(): ProxyResult<CommanderFleet> {
-        throw UnsupportedOperationException("EDSM cannot fetch fleet informations")
+        throw UnsupportedOperationException("EDSM cannot fetch fleet")
+    }
+
+    override suspend fun getCurrentLoadout(): ProxyResult<CommanderLoadout> {
+        throw UnsupportedOperationException("Inara cannot fetch loadout")
+    }
+
+    override suspend fun getAllLoadouts(): ProxyResult<CommanderLoadouts> {
+        throw UnsupportedOperationException("Inara cannot fetch loadouts")
     }
 
     override suspend fun getPosition(): ProxyResult<CommanderPosition> {
-        throw UnsupportedOperationException("Inara cannot fetch position informations")
+        throw UnsupportedOperationException("Inara cannot fetch position")
     }
 
 }

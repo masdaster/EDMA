@@ -34,6 +34,15 @@ object CommanderUtils {
         return false
     }
 
+    fun hasLoadoutData(context: Context): Boolean {
+        val frontierPlayer = FrontierPlayer(context)
+        if (frontierPlayer.isUsable()) {
+            return true
+        }
+
+        return false
+    }
+
     fun hasCreditsData(context: Context): Boolean {
         val edsmPlayer = EDSMPlayer(context)
         if (edsmPlayer.isUsable()) {
@@ -62,7 +71,14 @@ object CommanderUtils {
         return false
     }
 
-    fun hasCommanderInformations(context: Context): Boolean {
+    fun hasOdysseyRanks(context: Context): Boolean {
+        val edsmPlayer = EDSMPlayer(context)
+        val frontierPlayer = FrontierPlayer(context)
+
+        return edsmPlayer.isUsable() || frontierPlayer.isUsable()
+    }
+
+    fun hasCommanderStatus(context: Context): Boolean {
         val edsmPlayer = EDSMPlayer(context)
         val inaraPlayer = InaraPlayer(context)
         val frontierPlayer = FrontierPlayer(context)

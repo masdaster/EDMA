@@ -4,6 +4,7 @@ import com.github.masdaster.edma.activities.SystemDetailsActivity
 import com.github.masdaster.edma.adapters.SystemStationsAdapter
 import com.github.masdaster.edma.models.events.SystemStations
 import com.github.masdaster.edma.utils.NotificationsUtils
+import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
@@ -14,6 +15,19 @@ class SystemStationsFragment : AbstractListFragment<SystemStationsAdapter>() {
 
     override fun getNewRecyclerViewAdapter(): SystemStationsAdapter {
         return SystemStationsAdapter(context, binding.recyclerView)
+    }
+
+
+    override fun onStart() {
+        super.onStart()
+
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+
+        EventBus.getDefault().unregister(this)
     }
 
     override fun getData() {
@@ -32,9 +46,5 @@ class SystemStationsFragment : AbstractListFragment<SystemStationsAdapter>() {
 
         endLoading(stations.stations.isEmpty())
         recyclerViewAdapter.submitList(stations.stations)
-    }
-
-    companion object {
-        const val SYSTEM_STATIONS_FRAGMENT_TAG = "system_stations"
     }
 }

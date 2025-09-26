@@ -2,7 +2,6 @@
     <string name="app_name">EDMA</string>
 
     <!--URLs-->
-    <string name="edapi_base">https://ed-api.9cw.eu/</string>
     <string name="edapi_v4_base">https://ed.9cw.eu/</string>
     <string name="edsm_base">https://www.edsm.net/</string>
     <string name="inara_api_base">https://inara.cz/</string>
@@ -21,6 +20,7 @@
     <string name="ship_finder">Ship finder</string>
     <string name="commodity_finder">Commodity finder</string>
     <string name="commodities_list">Commodities</string>
+    <string name="outfitting_finder">Outfitting finder</string>
 
     <string name="about">About</string>
     <string name="commander">Commander</string>
@@ -36,9 +36,6 @@
     <string name="finished">Finished</string>
     <string name="community_goal_description">Community goal description</string>
     <string name="objective">Objective</string>
-    <string name="tier">Tier</string>
-    <string name="contributions">Contributions</string>
-    <string name="reward">Reward</string>
     <string name="no_description_yet">No description yet</string>
     <string name="no_objective_yet">No objective yet</string>
     <string name="cg_system_distance">System: %1$s</string>
@@ -54,8 +51,7 @@
     <string name="download_error">Error while downloading the content</string>
     <string name="no_chart_error">No history chart to display</string>
     <string name="no_chart_snackbar_error">Error while download the history chart</string>
-    <string name="my_location_error">Cannot get your current position</string>
-    <string name="no_commander_accounts_linked_error_message">You don\'t have any account enabled in the settings to get your commander informations. Enable at least one source in the settings.</string>
+    <string name="no_commander_accounts_linked_error_message">You don\'t have any account enabled in the settings to get your commander status. Enable at least one source in the settings.</string>
     <string name="no_commander_accounts_linked_error_settings_button">Open settings</string>
     <string name="error">Error</string>
 
@@ -68,6 +64,15 @@
     <string name="current_ship">Current ship</string>
     <string name="ship_value">Ship value</string>
     <string name="cargo_value">Cargo value</string>
+    <string name="suit">Suit</string>
+    <string name="first_primary_weapon">Primary weapon #1</string>
+    <string name="second_primary_weapon">Primary weapon #2</string>
+    <string name="secondary_weapon">Secondary weapon</string>
+    <string name="weapon_display">%1$s (%2$s)</string>
+    <string name="weapon_display_without_magazine">%1$s</string>
+    <string name="loadout">Loadout</string>
+    <string name="loadout_with_number">Loadout #%1$d</string>
+    <string name="loadouts">Loadouts</string>
 
     <!--Ranks-->
     <string name="rank_federation">Federation</string>
@@ -76,6 +81,8 @@
     <string name="rank_trading">Trade</string>
     <string name="rank_exploration">Exploration</string>
     <string name="rank_arena">Arena</string>
+    <string name="rank_mercenary">Mercenary</string>
+    <string name="rank_exobiologist">Exobiologist</string>
     <string name="player_ranks">Player ranks</string>
     <string name="faction_ranks">Faction ranks</string>
     <string-array name="ranks_combat">
@@ -88,6 +95,11 @@
         <item>Dangerous</item>
         <item>Deadly</item>
         <item>Elite</item>
+        <item>Elite I</item>
+        <item>Elite II</item>
+        <item>Elite III</item>
+        <item>Elite IV</item>
+        <item>Elite V</item>
     </string-array>
     <string-array name="ranks_trade">
         <item>Penniless</item>
@@ -99,6 +111,11 @@
         <item>Entrepreneur</item>
         <item>Tycoon</item>
         <item>Elite</item>
+        <item>Elite I</item>
+        <item>Elite II</item>
+        <item>Elite III</item>
+        <item>Elite IV</item>
+        <item>Elite V</item>
     </string-array>
     <string-array name="ranks_explorer">
         <item>Aimless</item>
@@ -110,6 +127,11 @@
         <item>Ranger</item>
         <item>Pioneer</item>
         <item>Elite</item>
+        <item>Elite I</item>
+        <item>Elite II</item>
+        <item>Elite III</item>
+        <item>Elite IV</item>
+        <item>Elite V</item>
     </string-array>
     <string-array name="ranks_cqc">
         <item>Helpless</item>
@@ -121,6 +143,43 @@
         <item>Hero</item>
         <item>Legend</item>
         <item>Elite</item>
+        <item>Elite I</item>
+        <item>Elite II</item>
+        <item>Elite III</item>
+        <item>Elite IV</item>
+        <item>Elite V</item>
+    </string-array>
+    <string-array name="ranks_mercenary">
+        <item>Defenceless</item>
+        <item>Mostly Defenceless</item>
+        <item>Rookie</item>
+        <item>Soldier</item>
+        <item>Gunslinger</item>
+        <item>Warrior</item>
+        <item>Gladiator</item>
+        <item>Deadeye</item>
+        <item>Elite</item>
+        <item>Elite I</item>
+        <item>Elite II</item>
+        <item>Elite III</item>
+        <item>Elite IV</item>
+        <item>Elite V</item>
+    </string-array>
+    <string-array name="ranks_exobiologist">
+        <item>Directionless</item>
+        <item>Mostly Directionless</item>
+        <item>Compiler</item>
+        <item>Collector</item>
+        <item>Cataloguer</item>
+        <item>Taxonomist</item>
+        <item>Ecologist</item>
+        <item>Geneticist</item>
+        <item>Elite</item>
+        <item>Elite I</item>
+        <item>Elite II</item>
+        <item>Elite III</item>
+        <item>Elite IV</item>
+        <item>Elite V</item>
     </string-array>
     <string-array name="ranks_federation">
         <item>None</item>
@@ -199,15 +258,17 @@
         <item>Sell</item>
     </string-array>
 
+    <!--Outfitting finder-->
+    <string name="outfitting_finder_subtitle">Find the nearest station selling or buying a specific outfitting</string>
+    <string name="outfitting">Outfitting</string>
+
     <!--Commodities list-->
     <string name="commodities_list_subtitle">Find the average price of a commodity, the top stations to buy/sell from…</string>
     <string name="rare_commodity">Rare commodity</string>
-    <string name="average_price">Average price</string>
     <string name="average_buy_price">Average buy price</string>
     <string name="average_sell_price">Average sell price</string>
     <string name="min_buy_price">Minimum buy price</string>
     <string name="max_sell_price">Maximum sell price</string>
-    <string name="informations">Informations</string>
     <string name="where_to_sell">Where to sell</string>
     <string name="where_to_buy">Where to buy</string>
     <string name="commodity_details">Commodity details</string>
@@ -262,13 +323,13 @@
     </string>
     <string name="about_icons" translatable="false">
         <![CDATA[
-        Space ship icon made by <a href="http://www.freepik.com">Freepik</a> from <a href="https://www.flaticon.com/">Flaticon</a> (<a href="http://creativecommons.org/licenses/by/3.0/">CC 3.0 BY license</a>)<br />
+        Galaxy icon by Victoruler from <a href="https://thenounproject.com/browse/icons/term/galaxy/" target="_blank" title="Galaxy Icons">Noun Project</a><br />
         Globe icon from <a href="https://fontawesome.com/">FontAwesome</a> (<a href="https://creativecommons.org/licenses/by/4.0/">CC 4.0 BY license</a>)<br />
         Elite Dangerous icons from <a href="http://edassets.org">EDAssets</a>, icons are fanmade or created by <a href="https://www.frontier.co.uk/">Frontier Developments</a><br />
-        Ships pictures from <a href="https://edsm.net">EDSM</a>, available on <a href="https://github.com/EDSM-NET/ED-Ships-ScreenShots">Github</a>
+        Ships pictures from <a href="https://edsm.net">EDSM</a>, available on <a href="https://github.com/EDSM-NET/ED-Ships-ScreenShots">GitHub</a>
         ]]>
     </string>
-    <string name="about_text">"This app was created by masdaster based on the work of corenting.\nIt is an unofficial app, not affiliated with Frontier Developments or the websites used as sources.\n\n See https://github.com/masdaster/EDMA for more information."</string>
+    <string name="about_text">"This app was created by masdaster based on the work of corenting.\nIt is an unofficial app, not affiliated with Frontier Developments or the websites used as sources.\n\n See https://github.com/masdaster/EDMA for more details (help, data sources used etc.)."</string>
     <string name="about_libs_title">Libraries and code used</string>
     <string name="about_icons_title">Icons used</string>
     <string name="about_contact_me_title">Contact me</string>
@@ -276,7 +337,7 @@
 
     <!--Settings-->
     <string name="title_activity_settings">Settings</string>
-    <string name="settings_cmdr_summary">Choose which accounts you want to use to fetch your commander informations</string>
+    <string name="settings_cmdr_summary">Choose which accounts you want to use to fetch your commander status</string>
     <string name="settings_cmdr_category">Commander</string>
     <string name="settings_cmdr_frontier_category_title">Frontier account</string>
     <string name="settings_cmdr_inara_category_title">INARA</string>
@@ -285,16 +346,18 @@
     <string name="settings_news_lang_summary">Change the language used for GalNet and news</string>
     <string name="settings_cmdr_edsm_username">Commander name</string>
     <string name="settings_cmdr_edsm_username_summary">The ingame name of your CMDR (not your EDSM username)</string>
+    <string name="settings_cmdr_loadout_display_enable">Display CMDR loadout</string>
+    <string name="settings_cmdr_loadout_display_enable_summary">Display loadouts details (current loadout and the list of your loadouts)</string>
     <string name="settings_cmdr_edsm_api_key">EDSM API key</string>
-    <string name="settings_cmdr_edsm_api_key_summary">Your personal EDSM API key. You can find it in the "API key" tab of the EDSM.net website settings.</string>
+    <string name="settings_cmdr_edsm_api_key_summary">Your personal EDSM API key. You can find it in the "API key" tab of the EDSM.net website settings</string>
     <string name="settings_cmdr_frontier_oauth">Link your Frontier account</string>
-    <string name="settings_cmdr_frontier_oauth_summary">Click here to (re)authorize EDMA to fetch your CMDR informations</string>
+    <string name="settings_cmdr_frontier_oauth_summary">Click here to (re)authorize EDMA to fetch your CMDR status</string>
     <string name="settings_cmdr_frontier_enable">Enable Frontier account</string>
-    <string name="settings_cmdr_frontier_enable_summary">Use your Frontier account to fetch your CMDR informations</string>
+    <string name="settings_cmdr_frontier_enable_summary">Use your Frontier account to fetch your CMDR status</string>
     <string name="settings_cmdr_inara_enable">Enable INARA</string>
-    <string name="settings_cmdr_inara_enable_summary">Use your INARA account to fetch your CMDR informations</string>
+    <string name="settings_cmdr_inara_enable_summary">Use your INARA account to fetch your CMDR status</string>
     <string name="settings_cmdr_edsm_enable">Enable EDSM</string>
-    <string name="settings_cmdr_edsm_enable_summary">Use your EDSM account to fetch your CMDR informations</string>
+    <string name="settings_cmdr_edsm_enable_summary">Use your EDSM account to fetch your CMDR status</string>
     <string name="settings_cmdr_inara_api_key">INARA API key</string>
     <string name="settings_cmdr_inara_api_key_summary">Your personal Inara API key. You can find it in the "Inara API" tab of the inara.cz website settings</string>
     <string name="pref_header_general">General</string>
@@ -326,9 +389,9 @@
     <string name="changelog_title">Changelog</string>
     <string name="changelog_message">
         <![CDATA[
-            <b>Version 2.23</b><br />
+            <b>Version 2.32</b><br />
             <ul>
-                <li>Fix commander tab login with Frontier API: the login was broken due a change in the API behavior</li><br />
+                <li>Fix name for new ship</li><br />
             </ul>
         ]]>
     </string>
