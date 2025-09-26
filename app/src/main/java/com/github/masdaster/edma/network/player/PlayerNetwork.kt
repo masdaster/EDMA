@@ -11,7 +11,6 @@ import com.github.masdaster.edma.models.ProxyResult
 
 interface PlayerNetwork {
     fun isUsable(): Boolean
-    fun getCommanderName(): String
 
     suspend fun getPosition(): ProxyResult<CommanderPosition>
     suspend fun getRanks(): ProxyResult<CommanderRanks>

@@ -8,21 +8,11 @@ import com.github.masdaster.edma.network.player.InaraPlayer
 
 object CommanderUtils {
     fun getCommanderName(context: Context): String {
-        val edsmPlayer = EDSMPlayer(context)
-
-        if (edsmPlayer.isUsable()) {
-            return SettingsUtils.getString(
-                context,
-                context.getString(R.string.settings_cmdr_edsm_username)
-            )
-        }
-
-        val inaraPlayer = InaraPlayer(context)
-        if (inaraPlayer.isUsable()) {
-            return inaraPlayer.getCommanderName()
-        }
-
-        return context.getString(R.string.commander)
+        return SettingsUtils.getString(
+            context,
+            context.getString(R.string.settings_cmdr_name),
+            R.string.commander
+        )
     }
 
     fun hasFleetData(context: Context): Boolean {
@@ -71,12 +61,7 @@ object CommanderUtils {
         return false
     }
 
-    fun hasOdysseyRanks(context: Context): Boolean {
-        val edsmPlayer = EDSMPlayer(context)
-        val frontierPlayer = FrontierPlayer(context)
-
-        return edsmPlayer.isUsable() || frontierPlayer.isUsable()
-    }
+    fun hasCurrentLoadoutData(context: Context): Boolean = FrontierPlayer(context).isUsable()
 
     fun hasCommanderStatus(context: Context): Boolean {
         val edsmPlayer = EDSMPlayer(context)

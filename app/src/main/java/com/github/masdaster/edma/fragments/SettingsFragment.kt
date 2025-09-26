@@ -38,7 +38,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
 
         // Bind preferences summary to values
-        val pref: Preference? = findPreference(getString(R.string.settings_cmdr_edsm_username))
+        val pref: Preference? = findPreference(getString(R.string.settings_cmdr_name))
         if (pref != null) {
             bindPreferenceSummaryToValue(pref)
         }

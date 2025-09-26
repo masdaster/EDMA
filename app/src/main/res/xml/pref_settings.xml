@@ -23,6 +23,12 @@
 
     <androidx.preference.PreferenceCategory app:title="@string/settings_cmdr_category">
         <androidx.preference.Preference android:summary="@string/settings_cmdr_summary" />
+        <androidx.preference.EditTextPreference
+            app:key="@string/settings_cmdr_name"
+            app:negativeButtonText="@android:string/cancel"
+            app:positiveButtonText="@android:string/ok"
+            app:summary="@string/settings_cmdr_name_summary"
+            app:title="@string/settings_cmdr_name" />
         <androidx.preference.Preference
             app:key="@string/settings_cmdr_help"
             app:summary="@string/settings_cmdr_help_summary"
@@ -59,12 +65,6 @@
                 app:key="@string/settings_cmdr_edsm_enable"
                 app:summary="@string/settings_cmdr_edsm_enable_summary"
                 app:title="@string/settings_cmdr_edsm_enable" />
-            <androidx.preference.EditTextPreference
-                app:key="@string/settings_cmdr_edsm_username"
-                app:negativeButtonText="@android:string/cancel"
-                app:positiveButtonText="@android:string/ok"
-                app:summary="@string/settings_cmdr_edsm_username_summary"
-                app:title="@string/settings_cmdr_edsm_username" />
             <androidx.preference.EditTextPreference
                 app:key="@string/settings_cmdr_edsm_api_key"
                 app:negativeButtonText="@android:string/cancel"

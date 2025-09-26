@@ -124,14 +124,6 @@ class CommanderStatusFragment : Fragment() {
             } else {
                 binding.locationContainer.visibility = View.VISIBLE
             }
-
-            if (!CommanderUtils.hasOdysseyRanks(currentContext)) {
-                binding.exobiologistRankLayout.rankRelativeLayout.visibility = View.GONE
-                binding.mercenaryRankLayout.rankRelativeLayout.visibility = View.GONE
-            } else {
-                binding.exobiologistRankLayout.rankRelativeLayout.visibility = View.VISIBLE
-                binding.mercenaryRankLayout.rankRelativeLayout.visibility = View.VISIBLE
-            }
         }
 
         // Setup observers

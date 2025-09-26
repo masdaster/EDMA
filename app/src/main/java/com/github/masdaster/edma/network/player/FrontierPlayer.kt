@@ -47,11 +47,6 @@ class FrontierPlayer(val context: Context) : PlayerNetwork {
         )
     }
 
-    override fun getCommanderName(): String {
-        return context.getString(R.string.commander)
-
-    }
-
     private fun shouldFetchNewData(): Boolean {
         synchronized(lastFetch) {
             val ret = when {

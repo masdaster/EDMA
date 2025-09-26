@@ -27,8 +27,10 @@ class InaraPlayer(val context: Context) : PlayerNetwork {
         .getInaraRetrofit(context.applicationContext)
     private val apiKey =
         SettingsUtils.getString(context, context.getString(R.string.settings_cmdr_inara_api_key))
-
-    private var commanderName = context.getString(R.string.commander)
+    private val commanderName = SettingsUtils.getString(
+        context,
+        context.getString(R.string.settings_cmdr_name)
+    )
 
     override fun isUsable(): Boolean {
         val enabled =
@@ -40,19 +42,16 @@ class InaraPlayer(val context: Context) : PlayerNetwork {
         return enabled && !apiKey.isNullOrEmpty()
     }
 
-    override fun getCommanderName(): String {
-        return commanderName
-    }
-
     private fun buildRequestBody(): InaraProfileRequestBody {
         val res = InaraProfileRequestBody()
 
         // Build header
         res.header = InaraRequestBodyHeader()
         res.header.ApiKey = apiKey
-        res.header.ApplicationName = context.getString(R.string.app_name)
+        res.header.ApplicationName = "EDCompanion"
         res.header.ApplicationVersion = BuildConfig.VERSION_NAME
         res.header.IsBeingDeveloped = BuildConfig.DEBUG
+        res.header.CommanderName = commanderName
 
         // Build event
         val profileEvent = InaraRequestBodyEvent()
@@ -73,6 +72,8 @@ class InaraPlayer(val context: Context) : PlayerNetwork {
             lateinit var tradeRank: CommanderRank
             lateinit var explorationRank: CommanderRank
             lateinit var cqcRank: CommanderRank
+            lateinit var exobiologistRank: CommanderRank
+            lateinit var mercenaryRank: CommanderRank
             lateinit var empireRank: CommanderRank
             lateinit var federationRank: CommanderRank
 
@@ -115,6 +116,24 @@ class InaraPlayer(val context: Context) : PlayerNetwork {
                         )
                     }
 
+                    "exobiologist" -> {
+                        exobiologistRank = CommanderRank(
+                            context.resources
+                                .getStringArray(R.array.ranks_exobiologist)[rank.RankValue],
+                            rank.RankValue,
+                            (rank.RankProgress * 100).toInt()
+                        )
+                    }
+
+                    "soldier" -> {
+                        mercenaryRank = CommanderRank(
+                            context.resources
+                                .getStringArray(R.array.ranks_mercenary)[rank.RankValue],
+                            rank.RankValue,
+                            (rank.RankProgress * 100).toInt()
+                        )
+                    }
+
                     "empire" -> {
                         empireRank = CommanderRank(
                             context.resources
@@ -135,15 +154,14 @@ class InaraPlayer(val context: Context) : PlayerNetwork {
                 }
             }
 
-            commanderName = apiRanks.events[0].EventData.CommanderName
             ProxyResult(
                 data = CommanderRanks(
                     combatRank,
                     tradeRank,
                     explorationRank,
                     cqcRank,
-                    null,
-                    null,
+                    exobiologistRank,
+                    mercenaryRank,
                     federationRank,
                     empireRank
                 ), error = null

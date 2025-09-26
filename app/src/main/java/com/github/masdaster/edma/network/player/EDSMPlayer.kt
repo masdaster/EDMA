@@ -22,12 +22,8 @@ class EDSMPlayer(val context: Context) : PlayerNetwork {
         SettingsUtils.getString(context, context.getString(R.string.settings_cmdr_edsm_api_key))
     private val commanderName = SettingsUtils.getString(
         context,
-        context.getString(R.string.settings_cmdr_edsm_username)
+        context.getString(R.string.settings_cmdr_name)
     )
-
-    override fun getCommanderName(): String {
-        return commanderName
-    }
 
     override fun isUsable(): Boolean {
         val enabled =

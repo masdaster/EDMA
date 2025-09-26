@@ -337,6 +337,8 @@
 
     <!--Settings-->
     <string name="title_activity_settings">Settings</string>
+    <string name="settings_cmdr_name">Commander name</string>
+    <string name="settings_cmdr_name_summary">The ingame name of your CMDR.</string>
     <string name="settings_cmdr_summary">Choose which accounts you want to use to fetch your commander status</string>
     <string name="settings_cmdr_category">Commander</string>
     <string name="settings_cmdr_frontier_category_title">Frontier account</string>
@@ -344,8 +346,6 @@
     <string name="settings_cmdr_edsm_category_title">EDSM</string>
     <string name="settings_news_lang">GalNet and news language</string>
     <string name="settings_news_lang_summary">Change the language used for GalNet and news</string>
-    <string name="settings_cmdr_edsm_username">Commander name</string>
-    <string name="settings_cmdr_edsm_username_summary">The ingame name of your CMDR (not your EDSM username)</string>
     <string name="settings_cmdr_loadout_display_enable">Display CMDR loadout</string>
     <string name="settings_cmdr_loadout_display_enable_summary">Display loadouts details (current loadout and the list of your loadouts)</string>
     <string name="settings_cmdr_edsm_api_key">EDSM API key</string>

@@ -24,6 +24,9 @@ public class InaraProfileRequestBody {
 
         @SerializedName("APIkey")
         public String ApiKey;
+
+        @SerializedName("commanderName")
+        public String CommanderName;
     }
 
     public static class InaraRequestBodyEvent {
