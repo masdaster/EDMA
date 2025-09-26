@@ -132,6 +132,14 @@ class CommanderStatusFragment : Fragment() {
 
             if (!CommanderUtils.hasCurrentShipData(currentContext)) {
                 binding.currentShipCardView.visibility = View.GONE
+            } else {
+                binding.currentShipCardView.visibility = View.VISIBLE
+            }
+
+            if (!CommanderUtils.hasCurrentLoadoutData(currentContext)) {
+                binding.currentLoadoutCardView.visibility = View.GONE
+            } else {
+                binding.currentLoadoutCardView.visibility = View.VISIBLE
             }
         }
 
@@ -304,7 +312,7 @@ class CommanderStatusFragment : Fragment() {
                 true
             )
         ) {
-            binding.currentLoadoutLayout.loadoutContainer.visibility = View.GONE
+            binding.currentLoadoutCardView.visibility = View.GONE
             return
         }
 
@@ -315,6 +323,7 @@ class CommanderStatusFragment : Fragment() {
 
             if (result.data.hasLoadout) {
                 binding.currentLoadoutLayout.loadoutContainer.visibility = View.VISIBLE
+                MiscUtils.loadLoadOutImage(binding.suitImageView, result.data)
                 binding.currentLoadoutLayout.suitTextView.text = result.data.suitName
                 binding.currentLoadoutLayout.suitGradeRatingBar.progress = result.data.suitGrade
 
@@ -336,7 +345,7 @@ class CommanderStatusFragment : Fragment() {
                 )
 
             } else {
-                binding.currentLoadoutLayout.loadoutContainer.visibility = View.GONE
+                binding.currentLoadoutCardView.visibility = View.GONE
             }
         }
     }
@@ -425,17 +434,6 @@ class CommanderStatusFragment : Fragment() {
     }
 
     private fun onCurrentShipChange(result: ProxyResult<Ship>) {
-        // Don't display if not enabled
-        if (!SettingsUtils.getBoolean(
-                context,
-                getString(R.string.settings_ship_state_display_enable),
-                true
-            )
-        ) {
-            binding.currentShipStateLayout.shipStateContainer.visibility = View.GONE
-            return
-        }
-
         handleResult(result) {
             if (result.data == null) {
                 return@handleResult
@@ -452,13 +450,26 @@ class CommanderStatusFragment : Fragment() {
             } else {
                 binding.currentShipSubtitleTextView.visibility = View.GONE
             }
-            binding.currentShipStateLayout.shipCockpitBreachedTextView.text = if(shipState.cockpitBreached) "yes" else "no"
-            binding.currentShipStateLayout.shipShieldUpTextView.text = if(shipState.shieldUp) "yes" else "no"
-            binding.currentShipStateLayout.shipHullHealthTextView.text = "${MathUtils.divAndRound(shipState.hullHealth,10000)}%"
-            binding.currentShipStateLayout.shipIntegrityHealthTextView.text = "${MathUtils.divAndRound(1000000-shipState.integrityHealth,10000)}%"
-            binding.currentShipStateLayout.shipPaintworkHealthTextView.text = "${MathUtils.divAndRound(1000000-shipState.paintworkHealth,10000)}%"
-            binding.currentShipStateLayout.shipShieldHealthTextView.text = "${MathUtils.divAndRound(shipState.shieldHealth, 10000)}%"
-            binding.currentShipStateLayout.shipOxygenRemainingTextView.text = "${MathUtils.divAndRound(shipState.oxygenRemaining, 1000)}s"
+
+            // Don't display if not enabled
+            if (SettingsUtils.getBoolean(
+                    context,
+                    getString(R.string.settings_ship_state_display_enable),
+                    true
+                )
+            ) {
+                binding.currentShipStateLayout.shipStateContainer.visibility = View.VISIBLE
+                binding.currentShipStateLayout.shipCockpitBreachedTextView.text = if(shipState.cockpitBreached) "yes" else "no"
+                binding.currentShipStateLayout.shipShieldUpTextView.text = if(shipState.shieldUp) "yes" else "no"
+                binding.currentShipStateLayout.shipHullHealthTextView.text = "${MathUtils.divAndRound(shipState.hullHealth,10000)}%"
+                binding.currentShipStateLayout.shipIntegrityHealthTextView.text = "${MathUtils.divAndRound(1000000-shipState.integrityHealth,10000)}%"
+                binding.currentShipStateLayout.shipPaintworkHealthTextView.text = "${MathUtils.divAndRound(1000000-shipState.paintworkHealth,10000)}%"
+                binding.currentShipStateLayout.shipShieldHealthTextView.text = "${MathUtils.divAndRound(shipState.shieldHealth, 10000)}%"
+                binding.currentShipStateLayout.shipOxygenRemainingTextView.text = "${MathUtils.divAndRound(shipState.oxygenRemaining, 1000)}s"
+            } else {
+                binding.currentShipStateLayout.shipStateContainer.visibility = View.GONE
+            }
+
             binding.currentShipCardView.setOnClickListener {
                 ByteArrayOutputStream().use { out ->
                     GZIPOutputStream(out).use {

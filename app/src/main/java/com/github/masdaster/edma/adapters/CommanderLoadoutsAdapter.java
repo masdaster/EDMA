@@ -1,13 +1,11 @@
 package com.github.masdaster.edma.adapters;
 
 import android.content.Context;
-import android.graphics.Matrix;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
@@ -17,6 +15,7 @@ import com.github.masdaster.edma.R;
 import com.github.masdaster.edma.databinding.ListItemLoadoutBinding;
 import com.github.masdaster.edma.models.CommanderLoadout;
 import com.github.masdaster.edma.models.CommanderLoadoutWeapon;
+import com.github.masdaster.edma.utils.MiscUtils;
 
 public class CommanderLoadoutsAdapter extends ListAdapter<CommanderLoadout,
         CommanderLoadoutsAdapter.loadoutViewHolder> {
@@ -81,13 +80,7 @@ public class CommanderLoadoutsAdapter extends ListAdapter<CommanderLoadout,
         CommanderLoadout currentLoadout = getItem(holder.getAdapterPosition());
 
         // Suit picture
-        holder.viewBinding.suitImageView.setImageResource(getSuitPicture(currentLoadout.getSuitType()));
-        final Matrix matrix = holder.viewBinding.suitImageView.getImageMatrix();
-        final float imageWidth = holder.viewBinding.suitImageView.getDrawable().getIntrinsicWidth();
-        final int screenWidth = context.getResources().getDisplayMetrics().widthPixels;
-        final float scaleRatio = screenWidth / imageWidth;
-        matrix.postScale(scaleRatio, scaleRatio);
-        holder.viewBinding.suitImageView.setImageMatrix(matrix);
+        MiscUtils.loadLoadOutImage(holder.viewBinding.suitImageView, currentLoadout);
 
         // Name
         if (currentLoadout.getLoadoutName() != null) {
@@ -115,20 +108,6 @@ public class CommanderLoadoutsAdapter extends ListAdapter<CommanderLoadout,
                 holder.viewBinding.currentLoadoutLayout.secondaryWeaponLabelTextView,
                 holder.viewBinding.currentLoadoutLayout.secondarWeaponTextView
         );
-    }
-
-    @DrawableRes
-    private int getSuitPicture(String suitType){
-        switch(suitType){
-            default:
-                return R.drawable.remlok_flight_suit;
-            case "UtilitySuit":
-                return R.drawable.maverick_utility_suit;
-            case "TacticalSuit":
-                return R.drawable.dominator_tactical_suit;
-            case "ExplorationSuit":
-                return R.drawable.artemis_explorer_suit;
-        }
     }
 
     public static class loadoutViewHolder extends RecyclerView.ViewHolder {

@@ -1,5 +1,6 @@
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/swipeContainer"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -96,19 +97,11 @@
                             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
                     </RelativeLayout>
 
-                    <include
-                        android:id="@+id/currentLoadoutLayout"
-                        layout="@layout/include_loadout_details"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/locationContainer"
-                        android:layout_marginTop="8dp" />
-
                     <TextView
                         android:id="@+id/factionsRanks"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/currentLoadoutLayout"
+                        android:layout_below="@+id/locationContainer"
                         android:layout_marginTop="8dp"
                         android:text="@string/faction_ranks"
                         android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
@@ -202,7 +195,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="164dp"
                         app:riv_corner_radius_top_left="@dimen/card_corner_radius"
-                        app:riv_corner_radius_top_right="@dimen/card_corner_radius" />
+                        app:riv_corner_radius_top_right="@dimen/card_corner_radius"
+                        tools:src="@drawable/ship_placeholder" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -237,6 +231,51 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/currentShipSubtitleTextView"
                             android:layout_marginTop="8dp" />
+                    </RelativeLayout>
+                </RelativeLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/currentLoadoutCardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/currentShipCardView"
+                android:layout_marginLeft="@dimen/card_spacing"
+                android:layout_marginTop="@dimen/card_spacing"
+                android:layout_marginRight="@dimen/card_spacing"
+                app:cardUseCompatPadding="true">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <com.makeramen.roundedimageview.RoundedImageView
+                        android:id="@+id/suitImageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
+                        app:riv_corner_radius_top_left="@dimen/card_corner_radius"
+                        app:riv_corner_radius_top_right="@dimen/card_corner_radius"
+                        tools:src="@drawable/remlok_flight_suit" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/suitImageView"
+                        android:orientation="vertical"
+                        android:paddingLeft="24dp"
+                        android:paddingTop="24dp"
+                        android:paddingRight="24dp"
+                        android:paddingBottom="24dp">
+
+                        <include
+                            android:id="@+id/currentLoadoutLayout"
+                            layout="@layout/include_loadout_details"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp" />
+
                     </RelativeLayout>
                 </RelativeLayout>
             </com.google.android.material.card.MaterialCardView>
